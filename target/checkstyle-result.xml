@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.3">
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\dao\AerolineaDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\dao\CategoriaDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\dao\CiudadDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\dao\ClienteDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\dao\PaqueteVueloDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\dao\ReservaDAO.java">
+<error line="5" column="18" severity="error" message="Using the &apos;.*&apos; form of import should be avoided - data_types.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="6" column="27" severity="error" message="Using the &apos;.*&apos; form of import should be avoided - jakarta.persistence.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="306" column="11" severity="error" message="Catching &apos;Exception&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalCatchCheck"/>
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\dao\RutaVueloDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\dao\UsuarioDAO.java">
+<error line="129" column="19" severity="error" message="Catching &apos;RuntimeException&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalCatchCheck"/>
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\dao\VueloDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\DtAerolinea.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\DtAeropuerto.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\DtCategoria.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\DtCliente.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\DtDatosVueloR.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\DtItemPaquete.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\DtPaqueteVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\DtPasaje.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\DtReserva.java">
+<error line="3" column="8" severity="error" message="Unused import - model.PaqueteVuelo." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\DtRutaVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\DtUsuario.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\DtVuelo.java">
+<error line="5" column="8" severity="error" message="Unused import - java.util.List." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\EstadoRuta.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\EstadoUsuario.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\TipoAsiento.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\data_types\TipoDoc.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\Main.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\model\Aerolinea.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\model\Aeropuerto.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\model\Categoria.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\model\Ciudad.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\model\Cliente.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\model\ItemPaquete.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\model\PaqueteVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\model\Pasaje.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\model\Reserva.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\model\RutaVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\model\Usuario.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\model\Vuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\sistema\ISistema.java">
+<error line="7" column="18" severity="error" message="Using the &apos;.*&apos; form of import should be avoided - data_types.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\sistema\Sistema.java">
+<error line="5" column="18" severity="error" message="Using the &apos;.*&apos; form of import should be avoided - data_types.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="594" column="11" severity="error" message="Catching &apos;Exception&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalCatchCheck"/>
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestAerolineaDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestAeropuerto.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestCategoriaDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestCiudadDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestClienteDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestDtAerolinea.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestDtAeropuerto.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestDtCategoria.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestDtCliente.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestDtDatosVueloR.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestDtItemPaquete.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestDtPaqueteVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestDtPasaje.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestDtReserva.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestDtRutaVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestDtUsuario.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestDtVuelo.java">
+<error line="8" column="8" severity="error" message="Unused import - java.util.List." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="11" column="15" severity="error" message="Unused import - org.junit.jupiter.api.Assertions.assertNotNull." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="12" column="15" severity="error" message="Unused import - org.junit.jupiter.api.Assertions.assertTrue." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestItemPaquete.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestPaqueteVueloDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestPasaje.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestReserva.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestReservaDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestRutaVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestRutaVueloDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestSistema.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestUsuarioDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\test\java\TestVueloDAO.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\AceptarRV.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\AgregarRDVaPaquete.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\AltaCategoria.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\AltaCiudad.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\AltaRutaVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\AltaVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\CompraPaquete.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\ConsultaPaqueteRDV.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\ConsultaRDV.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\ConsultaUsuario.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\consultaUsuarioTEST.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\ConsultaVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\CrearPaqueteDeRutasDeVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\MainFrame.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\ModificarUsuario.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\pruebaAltaUsuario.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\ReservaVuelo.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\utils\DatosPrueba.java">
+</file>
+<file name="C:\Users\Usuario\Documents\volando-uy-LOGICA-ENTREGA\src\ui\utils\SwingUtils.java">
+</file>
+</checkstyle>

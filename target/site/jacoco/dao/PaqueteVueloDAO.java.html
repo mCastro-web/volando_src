@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaqueteVueloDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">volandouy</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">PaqueteVueloDAO.java</span></div><h1>PaqueteVueloDAO.java</h1><pre class="source lang-java linenums">package dao;
+
+import data_types.DtItemPaquete;
+import data_types.DtPaqueteVuelo;
+import data_types.TipoAsiento;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+import model.ItemPaquete;
+import model.Reserva;
+import model.RutaVuelo;
+import model.Cliente;
+import model.Aerolinea;
+import model.PaqueteVuelo;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+<span class="fc" id="L24">public class PaqueteVueloDAO {</span>
+
+<span class="fc" id="L26">    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory(&quot;appPU&quot;);</span>
+
+    public void registrarPaqueteVuelo(PaqueteVuelo paquete) {
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if (paquete == null) {</span>
+<span class="fc" id="L30">            throw new IllegalArgumentException(&quot;El paquete no puede ser nulo&quot;);</span>
+        }
+<span class="fc bfc" id="L32" title="All 4 branches covered.">        if (paquete.getNombre() == null || paquete.getNombre().isBlank()) {</span>
+<span class="fc" id="L33">            throw new IllegalArgumentException(&quot;El nombre es obligatorio&quot;);</span>
+        }
+
+<span class="fc" id="L36">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+            // Verificar unicidad por nombre
+<span class="fc" id="L39">            TypedQuery&lt;Long&gt; query = entityManager.createQuery(</span>
+                    &quot;SELECT COUNT(p) FROM PaqueteVuelo p WHERE p.nombre = :nombre&quot;, Long.class);
+<span class="fc" id="L41">            query.setParameter(&quot;nombre&quot;, paquete.getNombre());</span>
+<span class="fc" id="L42">            long dup = query.getSingleResult();</span>
+
+<span class="fc bfc" id="L44" title="All 2 branches covered.">            if (dup &gt; 0) {</span>
+<span class="fc" id="L45">                throw new IllegalArgumentException(&quot;Ya existe un paquete con ese nombre.&quot;);</span>
+            }
+
+<span class="fc" id="L48">            entityManager.getTransaction().begin();</span>
+<span class="fc" id="L49">            entityManager.persist(paquete);</span>
+<span class="fc" id="L50">            entityManager.getTransaction().commit();</span>
+<span class="nc" id="L51">        } catch (PersistenceException ex) {</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            if (entityManager.getTransaction().isActive()) {</span>
+<span class="nc" id="L53">                entityManager.getTransaction().rollback();</span>
+            }
+<span class="nc" id="L55">            throw ex;</span>
+        } finally {
+<span class="fc" id="L57">            entityManager.close();</span>
+        }
+<span class="fc" id="L59">    }</span>
+
+
+
+    public List&lt;String&gt; listarNombresPaquetes() {
+<span class="fc" id="L64">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L66">            return entityManager.createQuery(&quot;SELECT nombre FROM PaqueteVuelo p&quot;, String.class).getResultList();</span>
+        } finally {
+<span class="fc" id="L68">            entityManager.close();</span>
+        }
+    }
+
+    public List&lt;String&gt; listarNombresPaquetesConRutas() {
+<span class="fc" id="L73">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L75">            return entityManager.createQuery(</span>
+                    &quot;SELECT DISTINCT p.nombre FROM PaqueteVuelo p JOIN p.items i WHERE i.rutaVuelo IS NOT NULL&quot;,
+                    String.class
+<span class="fc" id="L78">            ).getResultList();</span>
+        } finally {
+<span class="fc" id="L80">            entityManager.close();</span>
+        }
+    }
+
+
+    public DtPaqueteVuelo consultaPaquete(String nombre) {
+<span class="fc" id="L86">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L88">            PaqueteVuelo paqueteVuelo = entityManager.createQuery(</span>
+                            &quot;SELECT p FROM PaqueteVuelo p LEFT JOIN FETCH p.items WHERE p.nombre = :nombre&quot;,
+                            PaqueteVuelo.class)
+<span class="fc" id="L91">                    .setParameter(&quot;nombre&quot;, nombre)</span>
+<span class="fc" id="L92">                    .getSingleResult();</span>
+
+<span class="fc" id="L94">            return new DtPaqueteVuelo(</span>
+<span class="fc" id="L95">                    paqueteVuelo.getNombre(),</span>
+<span class="fc" id="L96">                    paqueteVuelo.getDescripcion(),</span>
+<span class="fc" id="L97">                    paqueteVuelo.getDiasValidez(),</span>
+<span class="fc" id="L98">                    paqueteVuelo.getDescuento(),</span>
+<span class="fc" id="L99">                    paqueteVuelo.getCosto(),</span>
+<span class="fc" id="L100">                    paqueteVuelo.getAltaFecha(),</span>
+<span class="fc" id="L101">                    paqueteVuelo.getItems(),</span>
+<span class="fc" id="L102">                    paqueteVuelo.getReservaPaquete()</span>
+            );
+        } finally {
+<span class="fc" id="L105">            entityManager.close();</span>
+        }
+    }
+
+
+    public void agregarRutaPaquete(PaqueteVuelo paqueteVuelo, Aerolinea aerolinea, RutaVuelo rutaVuelo, Integer cantidad, TipoAsiento tipoAsiento) {
+
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (paqueteVuelo == null)</span>
+<span class="fc" id="L113">            throw new IllegalArgumentException(&quot;Debe indicar un Paquete de Vuelo&quot;);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (aerolinea == null)</span>
+<span class="fc" id="L115">            throw new IllegalArgumentException(&quot;Debe indicar una Aerolínea&quot;);</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (rutaVuelo == null)</span>
+<span class="fc" id="L117">            throw new IllegalArgumentException(&quot;Debe indicar una Ruta de Vuelo&quot;);</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (tipoAsiento == null)</span>
+<span class="fc" id="L119">            throw new IllegalArgumentException(&quot;Debe indicar el tipo de asiento&quot;);</span>
+<span class="fc bfc" id="L120" title="All 4 branches covered.">        if (cantidad == null || cantidad &lt;= 0)</span>
+<span class="fc" id="L121">            throw new IllegalArgumentException(&quot;La cantidad debe ser mayor a 0&quot;);</span>
+
+<span class="fc" id="L123">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L125">            entityManager.getTransaction().begin();</span>
+
+<span class="fc" id="L127">            PaqueteVuelo paquete = entityManager.find(PaqueteVuelo.class, paqueteVuelo.getIdentificador());</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">            if (paquete == null)</span>
+<span class="nc" id="L129">                throw new IllegalArgumentException(&quot;El paquete indicado no existe&quot;);</span>
+
+<span class="fc" id="L131">            RutaVuelo ruta = entityManager.getReference(RutaVuelo.class, rutaVuelo.getNombre());</span>
+
+<span class="fc" id="L133">            ItemPaquete existente = null;</span>
+            try {
+<span class="fc" id="L135">                existente = entityManager.createQuery(</span>
+                                &quot;SELECT i FROM ItemPaquete i &quot; +
+                                        &quot;WHERE i.paqueteVuelo = :p AND i.rutaVuelo = :r AND i.tipoAsiento = :t&quot;,
+                                ItemPaquete.class
+                        )
+<span class="fc" id="L140">                        .setParameter(&quot;p&quot;, paquete)</span>
+<span class="fc" id="L141">                        .setParameter(&quot;r&quot;, ruta)</span>
+<span class="fc" id="L142">                        .setParameter(&quot;t&quot;, tipoAsiento)</span>
+<span class="fc" id="L143">                        .setMaxResults(1)</span>
+<span class="nc" id="L144">                        .getSingleResult();</span>
+<span class="fc" id="L145">            } catch (NoResultException ignore) {</span>
+                // No hacer nada si no hay resultado
+<span class="nc" id="L147">            }</span>
+<span class="fc" id="L148">            float costo = calcularCostoPaquete(rutaVuelo, tipoAsiento, cantidad);</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">            if (existente != null) {</span>
+<span class="nc" id="L150">                existente.setCant(existente.getCant() + cantidad);</span>
+            } else {
+<span class="fc" id="L152">                ItemPaquete nuevo = new ItemPaquete(cantidad, tipoAsiento, rutaVuelo, paqueteVuelo);</span>
+<span class="fc" id="L153">                entityManager.persist(nuevo);</span>
+            }
+
+<span class="fc" id="L156">            paquete.setCosto(paquete.getCosto() + costo);</span>
+<span class="fc" id="L157">            entityManager.getTransaction().commit();</span>
+<span class="nc" id="L158">        } catch (PersistenceException ex) {</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">            if (entityManager.getTransaction().isActive()) entityManager.getTransaction().rollback();</span>
+<span class="nc" id="L160">            throw ex;</span>
+        } finally {
+<span class="fc" id="L162">            entityManager.close();</span>
+        }
+
+
+<span class="fc" id="L166">    }</span>
+
+
+    public float calcularCostoPaquete(RutaVuelo rutaVuelo, TipoAsiento tipo, int cant) {
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (tipo == TipoAsiento.TURISTA)</span>
+<span class="fc" id="L171">            return rutaVuelo.getCostoBaseTurista() * cant;</span>
+        else
+<span class="fc" id="L173">            return rutaVuelo.getCostoBaseEjecutivo() * cant;</span>
+    }
+
+    public List&lt;DtItemPaquete&gt; listarItemsDePaquete(Long idPaquete) {
+<span class="nc" id="L177">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+            PaqueteVuelo paqueteVuelo;
+            try {
+<span class="nc" id="L181">                paqueteVuelo = entityManager.createQuery(</span>
+                                &quot;SELECT p FROM PaqueteVuelo p &quot; +
+                                        &quot;JOIN FETCH p.items i &quot; +
+                                        &quot;JOIN FETCH i.rutaVuelo &quot; +
+                                            &quot;WHERE p.identificador = :id&quot;,
+                                PaqueteVuelo.class)
+<span class="nc" id="L187">                        .setParameter(&quot;id&quot;, idPaquete)</span>
+<span class="nc" id="L188">                        .getSingleResult();</span>
+<span class="nc" id="L189">            } catch (NoResultException e) {</span>
+<span class="nc" id="L190">                return Collections.emptyList();</span>
+<span class="nc" id="L191">            }</span>
+
+<span class="nc" id="L193">            List&lt;DtItemPaquete&gt; dtItems = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">            for (ItemPaquete item : paqueteVuelo.getItems()) {</span>
+<span class="nc" id="L195">                dtItems.add(new DtItemPaquete(</span>
+<span class="nc" id="L196">                        item.getCant(),</span>
+<span class="nc" id="L197">                        item.getTipoAsiento(),</span>
+<span class="nc" id="L198">                        item.toDto().getNombreRuta()</span>
+                ));
+<span class="nc" id="L200">            }</span>
+<span class="nc" id="L201">            return dtItems;</span>
+        } finally {
+<span class="nc" id="L203">            entityManager.close();</span>
+        }
+    }
+
+    // Guardar reserva asociada a un paquete
+    public void guardarReservaPaquete(Reserva reserva) {
+<span class="fc" id="L209">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L211">            entityManager.getTransaction().begin();</span>
+<span class="fc" id="L212">            entityManager.persist(reserva);</span>
+<span class="fc" id="L213">            entityManager.getTransaction().commit();</span>
+<span class="nc" id="L214">        } catch (PersistenceException ex) {</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">            if (entityManager.getTransaction().isActive()) entityManager.getTransaction().rollback();</span>
+<span class="nc" id="L216">            throw ex;</span>
+        } finally {
+<span class="fc" id="L218">            entityManager.close();</span>
+        }
+<span class="fc" id="L220">    }</span>
+
+    public PaqueteVuelo buscarPaqueteVuelo(String nombre) {
+<span class="fc" id="L223">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L225">            return entityManager.createQuery(</span>
+                            &quot;SELECT p FROM PaqueteVuelo p WHERE p.nombre = :nombre&quot;, PaqueteVuelo.class)
+<span class="fc" id="L227">                    .setParameter(&quot;nombre&quot;, nombre)</span>
+<span class="fc" id="L228">                    .getSingleResult();</span>
+<span class="fc" id="L229">        } catch (NoResultException e) {</span>
+<span class="fc" id="L230">            return null;</span>
+        } finally {
+<span class="fc" id="L232">            entityManager.close();</span>
+        }
+    }
+
+    public boolean clienteYaComproPaquete(Cliente cliente, PaqueteVuelo paquete) {
+<span class="fc bfc" id="L237" title="All 4 branches covered.">        if (paquete == null || paquete.getIdentificador() == null) {</span>
+<span class="fc" id="L238">            throw new IllegalArgumentException(&quot;El paquete no es válido&quot;);</span>
+        }
+
+<span class="fc" id="L241">        Long idPaquete = paquete.getIdentificador();</span>
+
+<span class="fc" id="L243">        return cliente.getReserva().stream()</span>
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">                .anyMatch(res -&gt; res.getPaquete() != null</span>
+<span class="fc bfc" id="L245" title="All 2 branches covered.">                        &amp;&amp; res.getPaquete().getIdentificador().equals(idPaquete));</span>
+    }
+
+    public DtPaqueteVuelo obtenerDtPaquetePorNombre(String nombre) {
+<span class="fc" id="L249">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L251">            PaqueteVuelo paquete = entityManager.createQuery(</span>
+                            &quot;SELECT p FROM PaqueteVuelo p WHERE p.nombre = :nombre&quot;,
+                            PaqueteVuelo.class)
+<span class="fc" id="L254">                    .setParameter(&quot;nombre&quot;, nombre)</span>
+<span class="fc" id="L255">                    .getSingleResult();</span>
+
+
+<span class="fc" id="L258">            return new DtPaqueteVuelo(</span>
+<span class="fc" id="L259">                    paquete.getNombre(),</span>
+<span class="fc" id="L260">                    paquete.getDescripcion(),</span>
+<span class="fc" id="L261">                    paquete.getDiasValidez(),</span>
+<span class="fc" id="L262">                    paquete.getDescuento(),</span>
+<span class="fc" id="L263">                    paquete.getAltaFecha()</span>
+            );
+
+
+<span class="fc" id="L267">        } catch (PersistenceException e) {</span>
+<span class="fc" id="L268">            e.printStackTrace(); // te ayuda a ver errores de query o nulls</span>
+<span class="fc" id="L269">            return null;</span>
+        } finally {
+<span class="fc" id="L271">            entityManager.close();</span>
+        }
+    }
+
+    public List&lt;PaqueteVuelo&gt; listarPaquetes() {
+<span class="fc" id="L276">        EntityManager em = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L278">            return em.createQuery(&quot;SELECT p FROM PaqueteVuelo p&quot;, PaqueteVuelo.class).getResultList();</span>
+        } finally {
+<span class="fc" id="L280">            em.close();</span>
+        }
+    }
+
+    public List&lt;String&gt; buscarNombresRutasPorNombrePaquete(String nombrePaquete) {
+<span class="fc bfc" id="L285" title="All 4 branches covered.">        if (nombrePaquete == null || nombrePaquete.isBlank()) {</span>
+<span class="fc" id="L286">            throw new IllegalArgumentException(&quot;El nombre del paquete no puede ser nulo o vacío&quot;);</span>
+        }
+
+<span class="fc" id="L289">        EntityManager em = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L291">            PaqueteVuelo paquete = em.createQuery(</span>
+                            &quot;SELECT p FROM PaqueteVuelo p &quot; +
+                                    &quot;JOIN FETCH p.items i &quot; +
+                                    &quot;JOIN FETCH i.rutaVuelo &quot; +
+                                    &quot;WHERE p.nombre = :nombre&quot;,
+                            PaqueteVuelo.class)
+<span class="fc" id="L297">                    .setParameter(&quot;nombre&quot;, nombrePaquete)</span>
+<span class="nc" id="L298">                    .getSingleResult();</span>
+
+<span class="nc" id="L300">            return paquete.getItems().stream()</span>
+<span class="nc" id="L301">                    .map(item -&gt; item.getRutaVuelo().getNombre())</span>
+<span class="nc" id="L302">                    .filter(Objects::nonNull)</span>
+<span class="nc" id="L303">                    .distinct()</span>
+<span class="nc" id="L304">                    .toList();</span>
+<span class="fc" id="L305">        } catch (NoResultException e) {</span>
+<span class="fc" id="L306">            return List.of();</span>
+        } finally {
+<span class="fc" id="L308">            em.close();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

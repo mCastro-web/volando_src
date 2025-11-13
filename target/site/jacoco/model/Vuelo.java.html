@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Vuelo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">volandouy</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">Vuelo.java</span></div><h1>Vuelo.java</h1><pre class="source lang-java linenums">package model;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.AccessType;
+import jakarta.persistence.Access;
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
+
+@Entity
+@Table(name = &quot;Vuelos&quot;)
+@Access(AccessType.FIELD)
+public class Vuelo {
+
+    @Id
+    @Column(name = &quot;nombre&quot;, length = 120, nullable = false, updatable = false)
+    private String nombre;   // PK natural (identificador del vuelo)
+
+    @Column(name = &quot;fecha&quot;, nullable = false)
+    private LocalDate fecha;   // antes DtFecha
+
+    @Column(name = &quot;duracion&quot;, nullable = false)
+    private LocalTime duracion;   // antes DtHora
+
+    @Column(name = &quot;asientos_turista&quot;, nullable = false)
+    private int asientosTurista;
+
+    @Column(name = &quot;asientos_ejecutivo&quot;, nullable = false)
+    private int asientosEjecutivo;
+
+    @Column(name = &quot;fecha_alta&quot;, nullable = false)
+    private LocalDate fechaAlta;   // antes DtFecha
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;ruta_nombre&quot;, referencedColumnName = &quot;nombre&quot;, nullable = false)
+    private RutaVuelo ruta;
+
+<span class="fc" id="L47">    @OneToMany(mappedBy = &quot;vuelo&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    private List&lt;Reserva&gt; reservaVuelo = new ArrayList&lt;&gt;();
+
+    @Column(name = &quot;imagen&quot;)
+    private String urlImagen;
+
+    /** Constructor vacío requerido por JPA */
+<span class="fc" id="L54">    public Vuelo() { }</span>
+
+    public Vuelo(String nombre,
+                 LocalDate fecha,
+                 LocalTime duracion,
+                 int asientosTurista,
+                 int asientosEjecutivo,
+                 LocalDate fechaAlta,
+                 RutaVuelo ruta,
+<span class="fc" id="L63">                 String urlImagen) {</span>
+<span class="fc" id="L64">        this.nombre = nombre;</span>
+<span class="fc" id="L65">        this.fecha = fecha;</span>
+<span class="fc" id="L66">        this.duracion = duracion;</span>
+<span class="fc" id="L67">        this.asientosTurista = asientosTurista;</span>
+<span class="fc" id="L68">        this.asientosEjecutivo = asientosEjecutivo;</span>
+<span class="fc" id="L69">        this.fechaAlta = fechaAlta;</span>
+<span class="fc" id="L70">        this.ruta = ruta;</span>
+<span class="fc" id="L71">        this.urlImagen = urlImagen;</span>
+
+<span class="fc" id="L73">    }</span>
+
+    // --- Getters ---
+<span class="fc" id="L76">    public String getNombre() { return nombre; }</span>
+<span class="fc" id="L77">    public LocalDate getFecha() { return fecha; }</span>
+<span class="fc" id="L78">    public LocalTime getDuracion() { return duracion; }</span>
+<span class="fc" id="L79">    public int getAsientosTurista() { return asientosTurista; }</span>
+<span class="fc" id="L80">    public int getAsientosEjecutivo() { return asientosEjecutivo; }</span>
+<span class="fc" id="L81">    public LocalDate getFechaAlta() { return fechaAlta; }</span>
+<span class="fc" id="L82">    public RutaVuelo getRuta() { return ruta; }</span>
+<span class="fc" id="L83">    public List&lt;Reserva&gt; getReservaVuelo() { return reservaVuelo; }</span>
+<span class="fc" id="L84">    public String getUrlImagen() {return urlImagen; }</span>
+
+    // --- Setters ---
+<span class="fc" id="L87">    public void setNombre(String nombre) { this.nombre = nombre; }</span>
+<span class="fc" id="L88">    public void setFecha(LocalDate fecha) { this.fecha = fecha; }</span>
+<span class="fc" id="L89">    public void setDuracion(LocalTime duracion) { this.duracion = duracion; }</span>
+<span class="fc" id="L90">    public void setAsientosTurista(int asientosTurista) { this.asientosTurista = asientosTurista; }</span>
+<span class="fc" id="L91">    public void setAsientosEjecutivo(int asientosEjecutivo) { this.asientosEjecutivo = asientosEjecutivo; }</span>
+<span class="fc" id="L92">    public void setFechaAlta(LocalDate fechaAlta) { this.fechaAlta = fechaAlta; }</span>
+<span class="fc" id="L93">    public void setRuta(RutaVuelo ruta) { this.ruta = ruta; }</span>
+<span class="fc" id="L94">    public void setReservaVuelo(List&lt;Reserva&gt; reservaVuelo) { this.reservaVuelo = reservaVuelo; }</span>
+<span class="fc" id="L95">    public void setUrlImagen(String urlImagen) {this.urlImagen = urlImagen; }</span>
+}
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

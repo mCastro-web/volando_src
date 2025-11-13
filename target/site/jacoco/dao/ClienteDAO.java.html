@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClienteDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">volandouy</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">ClienteDAO.java</span></div><h1>ClienteDAO.java</h1><pre class="source lang-java linenums">package dao;
+
+
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.NoResultException;
+import model.Cliente;
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.util.List;
+
+<span class="fc" id="L17">public class ClienteDAO {</span>
+
+<span class="fc" id="L19">    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory(&quot;appPU&quot;);</span>
+
+    // Registrar cliente
+    public void guardarCliente(Cliente cliente) {
+<span class="fc" id="L23">        EntityManager entityManager = emf.createEntityManager();</span>
+<span class="fc" id="L24">        EntityTransaction transaction = entityManager.getTransaction();</span>
+        try {
+            // Validaciones de unicidad
+<span class="fc" id="L27">            Long countNick = entityManager.createQuery(</span>
+                            &quot;SELECT COUNT(u) FROM Cliente u WHERE u.nickname = :nick&quot;, Long.class)
+<span class="fc" id="L29">                    .setParameter(&quot;nick&quot;, cliente.getNickname())</span>
+<span class="fc" id="L30">                    .getSingleResult();</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">            if (countNick &gt; 0) throw new IllegalArgumentException(&quot;El nickname ya existe&quot;);</span>
+
+<span class="fc" id="L33">            Long countEmail = entityManager.createQuery(</span>
+                            &quot;SELECT COUNT(u) FROM Cliente u WHERE u.email = :mail&quot;, Long.class)
+<span class="fc" id="L35">                    .setParameter(&quot;mail&quot;, cliente.getEmail())</span>
+<span class="fc" id="L36">                    .getSingleResult();</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">            if (countEmail &gt; 0) throw new IllegalArgumentException(&quot;El email ya existe&quot;);</span>
+
+<span class="fc" id="L39">            Long countDoc = entityManager.createQuery(</span>
+                            &quot;SELECT COUNT(u) FROM Cliente u WHERE u.tipoDocumento = :tipo AND u.numDocumento = :num&quot;, Long.class)
+<span class="fc" id="L41">                    .setParameter(&quot;tipo&quot;, cliente.getTipoDocumento())</span>
+<span class="fc" id="L42">                    .setParameter(&quot;num&quot;, cliente.getNumDocumento())</span>
+<span class="fc" id="L43">                    .getSingleResult();</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">            if (countDoc &gt; 0) throw new IllegalArgumentException(&quot;Documento ya registrado&quot;);</span>
+
+
+
+
+
+<span class="fc" id="L50">            transaction.begin();</span>
+<span class="fc" id="L51">            entityManager.persist(cliente);</span>
+<span class="fc" id="L52">            transaction.commit();</span>
+<span class="nc" id="L53">        } catch (PersistenceException e) {</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            if (transaction.isActive()) transaction.rollback();</span>
+<span class="nc" id="L55">            throw e;</span>
+        } finally {
+<span class="fc" id="L57">            entityManager.close();</span>
+        }
+<span class="fc" id="L59">    }</span>
+
+    public Cliente obtenerClientePorNickname(String nick) {
+<span class="fc" id="L62">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L64">            TypedQuery&lt;Cliente&gt; query = entityManager.createQuery(</span>
+                    &quot;SELECT c FROM Cliente c LEFT JOIN FETCH c.reserva WHERE c.nickname = :nick&quot;, Cliente.class);
+<span class="fc" id="L66">            query.setParameter(&quot;nick&quot;, nick);</span>
+
+<span class="fc" id="L68">            return query.getSingleResult();</span>
+<span class="fc" id="L69">        } catch (NoResultException e) {</span>
+<span class="fc" id="L70">            return null;</span>
+        } finally {
+<span class="fc" id="L72">            entityManager.close();</span>
+        }
+    }
+
+    public List&lt;String&gt; listarNicknames() {
+<span class="fc" id="L77">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L79">            return entityManager.createQuery(&quot;SELECT c.nickname FROM Cliente c&quot;, String.class)</span>
+<span class="fc" id="L80">                    .getResultList();</span>
+        } finally {
+<span class="fc" id="L82">            entityManager.close();</span>
+        }
+    }
+
+
+    public void modificarCliente(Cliente cli, String nick) {
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (cli == null) throw new IllegalArgumentException(&quot;El cliente es obligatorio&quot;);</span>
+<span class="fc" id="L89">        EntityManager entityManager = emf.createEntityManager();</span>
+<span class="fc" id="L90">        EntityTransaction transaction = entityManager.getTransaction();</span>
+
+        try {
+<span class="fc" id="L93">            transaction.begin();</span>
+
+<span class="fc" id="L95">            Cliente cliente = entityManager.find(Cliente.class, nick);</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            if (cliente == null) {</span>
+<span class="fc" id="L97">                throw new IllegalArgumentException(&quot;No existe cliente con nickname: &quot; + cli.getNickname());</span>
+            }
+
+<span class="fc" id="L100">            cliente.setNombre(cli.getNombre());</span>
+<span class="fc" id="L101">            cliente.setApellido(cli.getApellido());</span>
+<span class="fc" id="L102">            cliente.setNacionalidad(cli.getNacionalidad());</span>
+<span class="fc" id="L103">            cliente.setTipoDocumento(cli.getTipoDocumento());</span>
+<span class="fc" id="L104">            cliente.setNumDocumento(cli.getNumDocumento());</span>
+
+<span class="pc bpc" id="L106" title="1 of 4 branches missed.">            if (cliente.getContrasenia() != cli.getContrasenia() &amp;&amp; cli.getContrasenia() != null) {</span>
+<span class="fc" id="L107">                String pass = BCrypt.hashpw(cli.getContrasenia(), BCrypt.gensalt());</span>
+<span class="fc" id="L108">                cliente.setContrasenia(pass);</span>
+            }
+
+<span class="fc" id="L111">            cliente.setUrlImagen(cli.getUrlImagen());</span>
+
+<span class="fc" id="L113">            transaction.commit();</span>
+<span class="nc" id="L114">        } catch (PersistenceException ex) {</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            if (transaction.isActive()) transaction.rollback();</span>
+<span class="nc" id="L116">            throw ex;</span>
+        } finally {
+<span class="fc" id="L118">            entityManager.close();</span>
+        }
+<span class="fc" id="L120">    }</span>
+
+    public List&lt;Cliente&gt; listarClientes() {
+<span class="nc" id="L123">        EntityManager em = emf.createEntityManager();</span>
+        try {
+<span class="nc" id="L125">            return em.createQuery(&quot;SELECT c FROM Cliente c ORDER BY LOWER(c.nickname)&quot;, Cliente.class)</span>
+<span class="nc" id="L126">                    .getResultList();</span>
+        } finally {
+<span class="nc" id="L128">            em.close();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

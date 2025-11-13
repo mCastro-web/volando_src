@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoriaDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">volandouy</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">CategoriaDAO.java</span></div><h1>CategoriaDAO.java</h1><pre class="source lang-java linenums">package dao;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.PersistenceException;
+import model.Categoria;
+import java.util.List;
+
+<span class="fc" id="L11">public class CategoriaDAO {</span>
+
+<span class="fc" id="L13">    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory(&quot;appPU&quot;);</span>
+
+    public void guardar(Categoria categoria) throws jakarta.persistence.PersistenceException  {
+<span class="fc" id="L16">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L18">            TypedQuery&lt;Long&gt; query = entityManager.createQuery(</span>
+                    &quot;SELECT COUNT(c) FROM Categoria c WHERE c.nombre = :nombre&quot;, Long.class);
+<span class="fc" id="L20">            query.setParameter(&quot;nombre&quot;, categoria.getNombre());</span>
+<span class="fc" id="L21">            long count = query.getSingleResult();</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">            if (count &gt; 0)</span>
+<span class="fc" id="L23">                throw new IllegalArgumentException(&quot;Ya existe una categoría con ese nombre.&quot;);</span>
+
+<span class="fc" id="L25">            entityManager.getTransaction().begin();</span>
+<span class="fc" id="L26">            entityManager.persist(categoria);</span>
+<span class="fc" id="L27">            entityManager.getTransaction().commit();</span>
+<span class="nc" id="L28">        } catch (PersistenceException ex) {</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">            if (entityManager.getTransaction().isActive())</span>
+<span class="nc" id="L30">                entityManager.getTransaction().rollback();</span>
+<span class="nc" id="L31">            throw ex;</span>
+        } finally {
+<span class="fc" id="L33">            entityManager.close();</span>
+        }
+<span class="fc" id="L35">    }</span>
+
+    public List&lt;String&gt; listarNombresCategoria() {
+<span class="fc" id="L38">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L40">            TypedQuery&lt;String&gt; query = entityManager.createQuery(</span>
+                    &quot;SELECT c.nombre FROM Categoria c ORDER BY c.nombre&quot;, String.class);
+<span class="fc" id="L42">            return query.getResultList();</span>
+        } finally {
+<span class="fc" id="L44">            entityManager.close();</span>
+        }
+    }
+
+    public Categoria obtenerCategoriaPorNombre(String nombre) {
+<span class="fc" id="L49">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L51">            TypedQuery&lt;Categoria&gt; query = entityManager.createQuery(</span>
+                    &quot;SELECT c FROM Categoria c WHERE c.nombre = :nombre&quot;, Categoria.class);
+<span class="fc" id="L53">            query.setParameter(&quot;nombre&quot;, nombre);</span>
+<span class="fc" id="L54">            List&lt;Categoria&gt; result = query.getResultList();</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">            return result.isEmpty() ? null : result.get(0);</span>
+        } finally {
+<span class="fc" id="L57">            entityManager.close();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

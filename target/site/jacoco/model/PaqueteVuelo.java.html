@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaqueteVuelo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">volandouy</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">PaqueteVuelo.java</span></div><h1>PaqueteVuelo.java</h1><pre class="source lang-java linenums">package model;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.AccessType;
+import jakarta.persistence.Access;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Transient;
+
+@Entity
+@Table(
+        name = &quot;PaquetesVuelo&quot;, uniqueConstraints = {
+        @UniqueConstraint(name = &quot;uk_paquetes_nombre&quot;, columnNames = {&quot;nombre&quot;})
+}
+)
+@Access(AccessType.FIELD)
+public class PaqueteVuelo {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long identificador;
+
+    @Column(name = &quot;nombre&quot;, nullable = false, length = 150)
+    private String nombre;
+
+    @Column(name = &quot;descripcion&quot;, nullable = false, length = 500)
+    private String descripcion;
+
+    @Column(name = &quot;dias_validez&quot;, nullable = false)
+    private int diasValidez;
+
+    @Column(name = &quot;descuento&quot;, nullable = false)
+    private float descuento;
+
+<span class="fc" id="L44">    @Column(name = &quot;costo&quot;, nullable = false)</span>
+    private float costo = 0;
+
+    @Column(name = &quot;altafecha&quot;, nullable = false)
+    private LocalDate altaFecha;
+
+<span class="fc" id="L50">    @OneToMany(mappedBy = &quot;paqueteVuelo&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    private List&lt;ItemPaquete&gt; items = new ArrayList&lt;ItemPaquete&gt;();
+
+    // @OneToMany(mappedBy = &quot;paquete&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+    //private Set&lt;Reserva&gt; reservaPaquete = new HashSet&lt;&gt;();
+
+<span class="fc" id="L56">    @Transient</span>
+    private List&lt;Reserva&gt; reservaPaquete = new ArrayList&lt;Reserva&gt;();
+
+<span class="fc" id="L59">    public  PaqueteVuelo() {}</span>
+
+<span class="fc" id="L61">    public PaqueteVuelo(String nombre, String descripcion, int diasValidez, float descuento, LocalDate altaFecha) {</span>
+<span class="fc" id="L62">        this.nombre = nombre;</span>
+<span class="fc" id="L63">        this.descripcion = descripcion;</span>
+<span class="fc" id="L64">        this.diasValidez = diasValidez;</span>
+<span class="fc" id="L65">        this.descuento = descuento;</span>
+<span class="fc" id="L66">        this.altaFecha =altaFecha;</span>
+<span class="fc" id="L67">    }</span>
+
+    // --- Getters/Setters ---
+<span class="fc" id="L70">    public Long getIdentificador() { return identificador; }</span>
+<span class="fc" id="L71">    public void setIdentificador(Long identificador) {  this.identificador = identificador; }</span>
+
+<span class="fc" id="L73">    public String getNombre() { return nombre; }</span>
+<span class="nc" id="L74">    public void setNombre(String nombre) { this.nombre = nombre; }</span>
+
+<span class="fc" id="L76">    public String getDescripcion() { return descripcion; }</span>
+<span class="nc" id="L77">    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }</span>
+
+<span class="fc" id="L79">    public int getDiasValidez() { return diasValidez; }</span>
+ //   public void setDiasValidez(int diasValidez) { this.diasValidez = diasValidez; }
+
+<span class="fc" id="L82">    public float getDescuento() { return descuento; }</span>
+<span class="nc" id="L83">    public void setDescuento(float descuento) { this.descuento = descuento; }</span>
+
+<span class="fc" id="L85">    public float getCosto() { return costo; }</span>
+<span class="fc" id="L86">    public void setCosto(float costo) { this.costo = costo; }</span>
+
+<span class="fc" id="L88">    public LocalDate getAltaFecha() { return altaFecha; }        // &lt;- ahora LocalDate</span>
+  //  public void setAltaFecha(LocalDate altaFecha) { this.altaFecha = altaFecha; }
+
+<span class="fc" id="L91">    public List&lt;ItemPaquete&gt; getItems() { return items; }</span>
+  //  public void setItems(List&lt;ItemPaquete&gt; items) { this.items = (items != null) ? items : new ArrayList&lt;ItemPaquete&gt;(); }
+
+<span class="fc" id="L94">    public List&lt;Reserva&gt; getReservaPaquete() { return reservaPaquete; }</span>
+ /*   public void setReservaPaquete(List&lt;Reserva&gt; reservaPaquete) {
+        this.reservaPaquete = (reservaPaquete != null) ? reservaPaquete : new ArrayList&lt;Reserva&gt;();
+    }*/
+
+ /*   public float getCostoConDescuento() {
+        if (descuento &gt; 0) {
+            return costo - (costo * (descuento / 100f));
+        }
+        return costo;
+    }*/
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

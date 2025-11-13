@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Aerolinea.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">volandouy</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">Aerolinea.java</span></div><h1>Aerolinea.java</h1><pre class="source lang-java linenums">package model;
+
+import data_types.DtAerolinea;
+import data_types.DtUsuario;
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.MapKey;
+import jakarta.persistence.CascadeType;
+import java.util.HashMap;
+import java.util.Map;
+
+@Entity
+@DiscriminatorValue(&quot;AEROLINEA&quot;)
+@Access(AccessType.FIELD)
+public class Aerolinea extends Usuario {
+
+    @Column(length = 300)
+    private String descripcion;
+
+    @Column(length = 200)
+    private String sitioWeb;
+
+    // Relación con rutas de vuelo (clave: nombre de ruta)
+<span class="fc" id="L28">    @OneToMany(mappedBy = &quot;aerolinea&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    @MapKey(name = &quot;nombre&quot;) // usa el campo &quot;nombre&quot; de RutaVuelo como clave del Map
+    private final Map&lt;String, RutaVuelo&gt; rutaVuelos = new HashMap&lt;&gt;();
+
+    /** Constructor vacío requerido por JPA */
+<span class="fc" id="L33">    public Aerolinea() { }</span>
+
+    public Aerolinea(String nickname, String nombre, String correo, String contrasenia, String urlImagen, String descripcion, String sitioWeb) {
+<span class="fc" id="L36">        super(nickname, nombre, correo, contrasenia, urlImagen);</span>
+<span class="fc" id="L37">        this.descripcion = descripcion;</span>
+<span class="fc" id="L38">        this.sitioWeb = sitioWeb;</span>
+<span class="fc" id="L39">    }</span>
+
+    public String getDescripcion() {
+<span class="fc" id="L42">        return descripcion;</span>
+    }
+
+    public void setDescripcion(String descripcion) {
+<span class="fc" id="L46">        this.descripcion = descripcion;</span>
+<span class="fc" id="L47">    }</span>
+
+    public String getSitioWeb() {
+<span class="fc" id="L50">        return sitioWeb;</span>
+    }
+
+    public void setSitioWeb(String sitioWeb) {
+<span class="fc" id="L54">        this.sitioWeb = sitioWeb;</span>
+<span class="fc" id="L55">    }</span>
+
+   /* public Collection&lt;RutaVuelo&gt; getRutaVuelo() {
+        return new ArrayList&lt;&gt;(rutaVuelos.values());
+    }*/
+
+
+
+    @Override
+    public DtUsuario getDataUsuario() {
+<span class="fc" id="L65">        return new DtAerolinea(</span>
+<span class="fc" id="L66">                getNickname(),</span>
+<span class="fc" id="L67">                getNombre(),</span>
+<span class="fc" id="L68">                getEmail(),</span>
+<span class="fc" id="L69">                getUrlImagen(),</span>
+<span class="fc" id="L70">                getDescripcion(),</span>
+<span class="fc" id="L71">                getSitioWeb()</span>
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

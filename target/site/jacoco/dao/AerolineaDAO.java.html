@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AerolineaDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">volandouy</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">AerolineaDAO.java</span></div><h1>AerolineaDAO.java</h1><pre class="source lang-java linenums">package dao;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceException;
+import model.Aerolinea;
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.util.List;
+
+<span class="fc" id="L13">public class AerolineaDAO {</span>
+<span class="fc" id="L14">    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory(&quot;appPU&quot;);</span>
+
+    public void guardarAerolinea(Aerolinea aerolinea) {
+<span class="fc" id="L17">        EntityManager entityM = emf.createEntityManager();</span>
+<span class="fc" id="L18">        EntityTransaction transaction = entityM.getTransaction();</span>
+        try {
+<span class="fc" id="L20">            transaction.begin();</span>
+<span class="fc" id="L21">            entityM.persist(aerolinea);</span>
+<span class="fc" id="L22">            transaction.commit();</span>
+<span class="nc" id="L23">        } catch (PersistenceException e) {</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">            if (transaction.isActive()) transaction.rollback();</span>
+<span class="nc" id="L25">            throw e;</span>
+        } finally {
+<span class="fc" id="L27">            entityM.close();</span>
+        }
+<span class="fc" id="L29">    }</span>
+
+    public Aerolinea obtenerAerolineaPorNick(String nick) {
+<span class="fc" id="L32">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L34">            return entityManager.find(Aerolinea.class, nick);</span>
+        } finally {
+<span class="fc" id="L36">            entityManager.close();</span>
+        }
+    }
+
+
+    public List&lt;String&gt; listarNicknamesAerolinea() {
+<span class="fc" id="L42">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L44">            return entityManager.createQuery(&quot;SELECT a.nickname FROM Aerolinea a&quot;, String.class).getResultList();</span>
+        } finally {
+<span class="fc" id="L46">            entityManager.close();</span>
+        }
+    }
+
+    public void modificarAerolinea(Aerolinea aero, String nick) {
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (aero == null) throw new IllegalArgumentException(&quot;La aerolínea es obligatoria&quot;);</span>
+<span class="fc" id="L52">        EntityManager entityManager = emf.createEntityManager();</span>
+<span class="fc" id="L53">        EntityTransaction transaction = entityManager.getTransaction();</span>
+
+        try {
+<span class="fc" id="L56">            transaction.begin();</span>
+
+<span class="fc" id="L58">            Aerolinea aerolinea = entityManager.find(Aerolinea.class, nick);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">            if (aerolinea == null) {</span>
+<span class="fc" id="L60">                throw new IllegalArgumentException(&quot;No existe aerolínea con nickname: &quot; + nick);</span>
+            }
+
+<span class="fc" id="L63">            aerolinea.setNombre(aero.getNombre());</span>
+<span class="fc" id="L64">            aerolinea.setDescripcion(aero.getDescripcion());</span>
+<span class="fc" id="L65">            aerolinea.setSitioWeb(aero.getSitioWeb());</span>
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">            if (aerolinea.getContrasenia() != aero.getContrasenia() &amp;&amp; aero.getContrasenia() != null) {</span>
+<span class="fc" id="L67">                String pass = BCrypt.hashpw(aero.getContrasenia(), BCrypt.gensalt());</span>
+<span class="fc" id="L68">                aerolinea.setContrasenia(pass);</span>
+            }
+<span class="fc" id="L70">            aerolinea.setUrlImagen(aero.getUrlImagen());</span>
+<span class="fc" id="L71">            transaction.commit();</span>
+<span class="nc" id="L72">        } catch (PersistenceException ex) {</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            if (transaction.isActive()) transaction.rollback();</span>
+<span class="nc" id="L74">            throw ex;</span>
+        } finally {
+<span class="fc" id="L76">            entityManager.close();</span>
+        }
+<span class="fc" id="L78">    }</span>
+
+    public List&lt;Aerolinea&gt; listarAerolineas() {
+<span class="fc" id="L81">        EntityManager em = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L83">            return em.createQuery(&quot;SELECT a FROM Aerolinea a&quot;, Aerolinea.class).getResultList();</span>
+        } finally {
+<span class="fc" id="L85">            em.close();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

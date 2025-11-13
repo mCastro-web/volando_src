@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ItemPaquete.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">volandouy</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">ItemPaquete.java</span></div><h1>ItemPaquete.java</h1><pre class="source lang-java linenums">package model;
+
+
+import data_types.DtItemPaquete;
+import data_types.TipoAsiento;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.AccessType;
+import jakarta.persistence.Access;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.FetchType;
+
+@Entity
+@Table(name = &quot;ItemsPaquete&quot;)
+@Access(AccessType.FIELD)
+public class ItemPaquete {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long identificador;
+
+    @Column(name = &quot;cantidad&quot;, nullable = false)
+    private int cant;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;tipo_asiento&quot;, length = 20, nullable = false)
+    private TipoAsiento tipoAsiento;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;ruta_nombre&quot;, referencedColumnName = &quot;nombre&quot;, nullable = false)
+    private RutaVuelo rutaVuelo;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;paquete_id&quot;)
+    private PaqueteVuelo paqueteVuelo;
+
+<span class="fc" id="L44">    public ItemPaquete() {}</span>
+
+<span class="fc" id="L46">    public ItemPaquete(int cant, TipoAsiento tipoAsiento, RutaVuelo ruta, PaqueteVuelo paquete) {</span>
+<span class="fc" id="L47">        this.cant = cant;</span>
+<span class="fc" id="L48">        this.tipoAsiento = tipoAsiento;</span>
+<span class="fc" id="L49">        this.rutaVuelo = ruta;</span>
+<span class="fc" id="L50">        this.paqueteVuelo = paquete;</span>
+<span class="fc" id="L51">    }</span>
+
+
+
+<span class="fc" id="L55">    public Long getIdentificador() { return identificador; }</span>
+<span class="fc" id="L56">    public void setIdentificador(Long identificador) { this.identificador = identificador; }</span>
+
+    public int getCant() {
+<span class="fc" id="L59">        return cant;</span>
+    }
+    public void setCant(int cant) {
+<span class="fc" id="L62">        this.cant = cant;</span>
+<span class="fc" id="L63">    }</span>
+
+    public TipoAsiento getTipoAsiento() {
+<span class="fc" id="L66">        return tipoAsiento;</span>
+    }
+    public void setTipoAsiento(TipoAsiento tipoAsiento) {
+<span class="fc" id="L69">        this.tipoAsiento = tipoAsiento;</span>
+<span class="fc" id="L70">    }</span>
+
+<span class="fc" id="L72">    public RutaVuelo getRutaVuelo(){ return rutaVuelo; }</span>
+<span class="fc" id="L73">    public void setRutaVuelo(RutaVuelo rutaVuelo) { this.rutaVuelo = rutaVuelo; }</span>
+
+<span class="fc" id="L75">    public PaqueteVuelo getPaqueteVuelo(){return paqueteVuelo; }</span>
+<span class="fc" id="L76">    public void setPaqueteVuelo(PaqueteVuelo paqueteVuelo) { this.paqueteVuelo = paqueteVuelo; }</span>
+
+    public DtItemPaquete toDto() {
+<span class="fc" id="L79">        String nombreRuta = null;</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (this.rutaVuelo != null) {</span>
+<span class="fc" id="L81">            nombreRuta = this.rutaVuelo.getNombre();</span>
+        }
+
+<span class="fc" id="L84">        return new DtItemPaquete(</span>
+                this.cant,
+                this.tipoAsiento,
+<span class="fc bfc" id="L87" title="All 2 branches covered.">                this.rutaVuelo != null ? this.rutaVuelo.getNombre() : &quot;Sin ruta&quot;</span>
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

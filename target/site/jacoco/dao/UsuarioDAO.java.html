@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UsuarioDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">volandouy</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">UsuarioDAO.java</span></div><h1>UsuarioDAO.java</h1><pre class="source lang-java linenums">package dao;
+
+
+import data_types.DtAerolinea;
+import data_types.DtCliente;
+import data_types.DtUsuario;
+import data_types.EstadoUsuario;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+import model.Aerolinea;
+import model.Cliente;
+import model.Usuario;
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.util.List;
+
+import static data_types.EstadoUsuario.INGRESADO;
+
+public class UsuarioDAO {
+
+    private static UsuarioDAO instancia;
+<span class="fc" id="L26">    private static final EntityManagerFactory emf =</span>
+<span class="fc" id="L27">            Persistence.createEntityManagerFactory(&quot;appPU&quot;);</span>
+
+<span class="fc" id="L29">    public UsuarioDAO() {}</span>
+
+    public static UsuarioDAO getInstance() {
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (instancia == null) instancia = new UsuarioDAO();</span>
+<span class="fc" id="L33">        return instancia;</span>
+    }
+
+    public List&lt;String&gt; listarNicknamesUsuarios() {
+<span class="fc" id="L37">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L39">            return entityManager.createQuery(&quot;SELECT u.nickname FROM Usuario u&quot;, String.class)</span>
+<span class="fc" id="L40">                    .getResultList();</span>
+        } finally {
+<span class="fc" id="L42">            entityManager.close();</span>
+        }
+    }
+
+
+    public DtUsuario dataUsuarioPorNick(String nickname) {
+<span class="pc bpc" id="L48" title="2 of 4 branches missed.">        if (nickname == null || nickname.isBlank()) {</span>
+<span class="nc" id="L49">            throw new IllegalArgumentException(&quot;El nickname es obligatorio.&quot;);</span>
+        }
+
+<span class="fc" id="L52">        EntityManager entityManager = emf.createEntityManager(); // asumimos que tenés un 'emf' accesible aquí</span>
+        try {
+<span class="fc" id="L54">            Usuario usuario = entityManager.find(Usuario.class, nickname);</span>
+
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            if (usuario == null) {</span>
+<span class="fc" id="L57">                throw new IllegalArgumentException(&quot;No existe el usuario con nickname: &quot; + nickname);</span>
+            }
+
+<span class="fc bfc" id="L60" title="All 2 branches covered.">            if (usuario instanceof Cliente cliente) {</span>
+<span class="fc" id="L61">                return new DtCliente(</span>
+<span class="fc" id="L62">                        cliente.getNickname(),</span>
+<span class="fc" id="L63">                        cliente.getNombre(),</span>
+<span class="fc" id="L64">                        cliente.getEmail(),</span>
+<span class="fc" id="L65">                        cliente.getUrlImagen(),</span>
+<span class="fc" id="L66">                        cliente.getApellido(),</span>
+<span class="fc" id="L67">                        cliente.getFechaNac(),</span>
+<span class="fc" id="L68">                        cliente.getNacionalidad(),</span>
+<span class="fc" id="L69">                        cliente.getTipoDocumento(),</span>
+<span class="fc" id="L70">                        cliente.getNumDocumento()</span>
+                );
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">            } else if (usuario instanceof Aerolinea aerolinea) {</span>
+<span class="fc" id="L73">                return new DtAerolinea(</span>
+<span class="fc" id="L74">                        aerolinea.getNickname(),</span>
+<span class="fc" id="L75">                        aerolinea.getNombre(),</span>
+<span class="fc" id="L76">                        aerolinea.getEmail(),</span>
+<span class="fc" id="L77">                        aerolinea.getUrlImagen(),</span>
+<span class="fc" id="L78">                        aerolinea.getDescripcion(),</span>
+<span class="fc" id="L79">                        aerolinea.getSitioWeb()</span>
+                );
+            } else {
+                // Fallback genérico
+<span class="nc" id="L83">                return new DtUsuario(usuario.getNickname(), usuario.getNombre(), usuario.getEmail(),  usuario.getUrlImagen(),  &quot;USUARIO&quot;);</span>
+            }
+
+        } finally {
+<span class="fc" id="L87">            entityManager.close();</span>
+        }
+    }
+
+
+
+    public boolean existeUsuarioConEmail(String email) {
+<span class="fc" id="L94">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L96">            Long count = entityManager.createQuery(</span>
+                    &quot;SELECT COUNT(u) FROM Usuario u WHERE u.email = :email&quot;,
+                    Long.class
+<span class="fc" id="L99">            ).setParameter(&quot;email&quot;, email).getSingleResult();</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">            return count &gt; 0;</span>
+        } finally {
+<span class="fc" id="L102">            entityManager.close();</span>
+        }
+    }
+
+    public DtUsuario iniciarSesion(String identificador, String passwordPlano) {
+<span class="pc bpc" id="L107" title="3 of 6 branches missed.">        if (identificador == null || identificador.isBlank() ||</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">                passwordPlano == null || passwordPlano.isBlank()) {</span>
+<span class="nc" id="L109">            throw new IllegalArgumentException(&quot;Faltan credenciales.&quot;);</span>
+        }
+
+<span class="fc" id="L112">        EntityManager em = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L114">            Usuario u = findByIdentificador(em, identificador.trim());</span>
+
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">            if (u == null) {</span>
+<span class="nc" id="L117">                throw new IllegalArgumentException(&quot;Usuario no existe.&quot;);</span>
+            }
+
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">            if (!BCrypt.checkpw(passwordPlano, getPasswordHash(u))) {</span>
+<span class="nc" id="L121">                throw new IllegalArgumentException(&quot;Contraseña incorrecta.&quot;);</span>
+            }
+
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">            if (u.getEstado() == EstadoUsuario.CERRADO) {</span>
+<span class="nc" id="L125">                em.getTransaction().begin();</span>
+                try {
+<span class="nc" id="L127">                    u.setEstado(INGRESADO);</span>
+<span class="nc" id="L128">                    em.getTransaction().commit();</span>
+<span class="nc" id="L129">                } catch (RuntimeException ex) {</span>
+<span class="nc" id="L130">                    em.getTransaction().rollback();</span>
+<span class="nc" id="L131">                    throw ex;</span>
+<span class="nc" id="L132">                }</span>
+            }
+
+<span class="fc" id="L135">            return u.getDataUsuario();</span>
+
+<span class="nc" id="L137">        } catch (NoResultException e) {</span>
+<span class="nc" id="L138">            throw new IllegalArgumentException(&quot;Usuario no existe.&quot;);</span>
+        } finally {
+<span class="fc" id="L140">            em.close();</span>
+        }
+    }
+
+    public DtUsuario cerrarSesion(String nick) {
+<span class="pc bpc" id="L145" title="2 of 4 branches missed.">        if (nick == null || nick.isBlank()) {</span>
+<span class="nc" id="L146">            throw new IllegalArgumentException(&quot;Nickname requerido.&quot;);</span>
+        }
+
+<span class="fc" id="L149">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L151">            TypedQuery&lt;Usuario&gt; query = entityManager.createQuery(</span>
+                    &quot;SELECT u FROM Usuario u WHERE u.nickname = :nick&quot;, Usuario.class);
+<span class="fc" id="L153">            query.setParameter(&quot;nick&quot;, nick);</span>
+
+<span class="fc" id="L155">            Usuario usuario = query.getSingleResult();</span>
+
+<span class="fc" id="L157">            entityManager.getTransaction().begin();</span>
+            try {
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">                if (usuario.getEstado() != EstadoUsuario.CERRADO) {</span>
+<span class="fc" id="L160">                    usuario.setEstado(EstadoUsuario.CERRADO);</span>
+                }
+<span class="fc" id="L162">                entityManager.getTransaction().commit();</span>
+<span class="nc" id="L163">            } catch (PersistenceException ex) {</span>
+<span class="nc" id="L164">                entityManager.getTransaction().rollback();</span>
+<span class="nc" id="L165">                throw ex;</span>
+<span class="fc" id="L166">            }</span>
+
+<span class="fc" id="L168">            return usuario.getDataUsuario();</span>
+
+<span class="nc" id="L170">        } catch (NoResultException e) {</span>
+<span class="nc" id="L171">            throw new IllegalArgumentException(&quot;Usuario no existe.&quot;);</span>
+        } finally {
+<span class="fc" id="L173">            entityManager.close();</span>
+        }
+    }
+
+    /** Busca por email (LOWER) o nickname (exacto). */
+    private Usuario findByIdentificador(EntityManager entityManager, String identificador) {
+<span class="fc" id="L179">        TypedQuery&lt;Usuario&gt; query = entityManager.createQuery(</span>
+                &quot;SELECT u FROM Usuario u &quot; +
+                        &quot;WHERE LOWER(u.email) = :idLower OR u.nickname = :idExact&quot;,
+                Usuario.class
+        );
+<span class="fc" id="L184">        query.setParameter(&quot;idLower&quot;, identificador.toLowerCase());</span>
+<span class="fc" id="L185">        query.setParameter(&quot;idExact&quot;, identificador);</span>
+<span class="fc" id="L186">        return query.getSingleResult();</span>
+    }
+
+    private String getPasswordHash(Usuario usuario) {
+<span class="fc" id="L190">        return usuario.getContrasenia();</span>
+    }
+
+    public DtUsuario registrarEstadoUsuario(Usuario usuario){
+
+<span class="fc" id="L195">        EntityManager entityManager = emf.createEntityManager();</span>
+<span class="fc" id="L196">        entityManager.getTransaction().begin();</span>
+        try {
+<span class="fc" id="L198">            usuario.setEstado(EstadoUsuario.INGRESADO);</span>
+<span class="fc" id="L199">            entityManager.getTransaction().commit();</span>
+<span class="nc" id="L200">        } catch (PersistenceException ex) {</span>
+<span class="nc" id="L201">            entityManager.getTransaction().rollback();</span>
+<span class="nc" id="L202">            throw ex;</span>
+<span class="fc" id="L203">        }</span>
+
+<span class="fc" id="L205">        return usuario.getDataUsuario();</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

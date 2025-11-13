@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VueloDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">volandouy</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">VueloDAO.java</span></div><h1>VueloDAO.java</h1><pre class="source lang-java linenums">package dao;
+
+import data_types.DtDatosVueloR;
+import data_types.DtVuelo;
+import data_types.TipoAsiento;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+import model.Vuelo;
+import model.RutaVuelo;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="fc" id="L19">public class VueloDAO {</span>
+
+<span class="fc" id="L21">    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory(&quot;appPU&quot;);</span>
+
+    public void guardarVuelo(String nombre,
+                             LocalDate fecha,
+                             LocalTime duracion,
+                             int asientosTurista,
+                             int asientosEjecutivo,
+                             LocalDate fechaAlta,
+                             RutaVuelo ruta,
+                             String urlImagen) {
+
+<span class="fc" id="L32">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L34">            entityManager.getTransaction().begin();</span>
+
+            // Verificar si ya existe
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">            if (entityManager.find(Vuelo.class, nombre) != null)</span>
+<span class="nc" id="L38">                throw new IllegalArgumentException(&quot;Ya existe un vuelo con el nombre '&quot; + nombre + &quot;'.&quot;);</span>
+
+<span class="fc" id="L40">            Vuelo vuelo = new Vuelo(nombre, fecha, duracion, asientosTurista, asientosEjecutivo, fechaAlta, ruta, urlImagen);</span>
+<span class="fc" id="L41">            entityManager.persist(vuelo);</span>
+
+<span class="fc" id="L43">            entityManager.getTransaction().commit();</span>
+<span class="nc" id="L44">        } catch (PersistenceException e) {</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">            if (entityManager.getTransaction().isActive()) entityManager.getTransaction().rollback();</span>
+<span class="nc" id="L46">            throw e;</span>
+        } finally {
+<span class="fc" id="L48">            entityManager.close();</span>
+        }
+<span class="fc" id="L50">    }</span>
+
+    public Vuelo buscarPorNombre(String nombreVuelo) {
+<span class="fc" id="L53">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L55">            TypedQuery&lt;Vuelo&gt; query = entityManager.createQuery(</span>
+                    &quot;SELECT v FROM Vuelo v JOIN FETCH v.ruta WHERE v.nombre = :nombre&quot;, Vuelo.class);
+<span class="fc" id="L57">            query.setParameter(&quot;nombre&quot;, nombreVuelo);</span>
+<span class="fc" id="L58">            return query.getSingleResult();</span>
+<span class="fc" id="L59">        } catch (NoResultException e) {</span>
+<span class="fc" id="L60">            return null;</span>
+        } finally {
+<span class="fc" id="L62">            entityManager.close();</span>
+        }
+    }
+
+
+    public List&lt;String&gt; listarNombresVuelosPorRuta(String nombreRuta) {
+<span class="fc" id="L68">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L70">            TypedQuery&lt;String&gt; query = entityManager.createQuery(</span>
+                    &quot;SELECT v.nombre FROM Vuelo v WHERE v.ruta.nombre = :nombreRuta&quot;, String.class);
+<span class="fc" id="L72">            query.setParameter(&quot;nombreRuta&quot;, nombreRuta);</span>
+<span class="fc" id="L73">            return query.getResultList();</span>
+        } finally {
+<span class="fc" id="L75">            entityManager.close();</span>
+        }
+    }
+    // Devuelve la cantidad de asientos ocupados de un vuelo según el tipo de asiento
+    public Long contarAsientosOcupados(String nombreVuelo, TipoAsiento tipoAsiento) {
+<span class="fc" id="L80">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L82">            return entityManager.createQuery(</span>
+                            &quot;SELECT COUNT(p) FROM Pasaje p WHERE p.reserva.vuelo.nombre = :vuelo AND p.reserva.tipoAsiento = :tipo&quot;,
+                            Long.class)
+<span class="fc" id="L85">                    .setParameter(&quot;vuelo&quot;, nombreVuelo)</span>
+<span class="fc" id="L86">                    .setParameter(&quot;tipo&quot;, tipoAsiento)</span>
+<span class="fc" id="L87">                    .getSingleResult();</span>
+        } finally {
+<span class="fc" id="L89">            entityManager.close();</span>
+        }
+    }
+
+    public List&lt;DtDatosVueloR&gt; listarVuelosDeRuta(String nombreRuta) {
+<span class="fc" id="L94">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L96">            TypedQuery&lt;Vuelo&gt; query = entityManager.createQuery(</span>
+                    &quot;SELECT v FROM Vuelo v WHERE v.ruta.nombre = :nombreRuta&quot;,
+                    Vuelo.class
+            );
+<span class="fc" id="L100">            query.setParameter(&quot;nombreRuta&quot;, nombreRuta);</span>
+
+<span class="fc" id="L102">            List&lt;Vuelo&gt; vuelos = query.getResultList();</span>
+<span class="fc" id="L103">            List&lt;DtDatosVueloR&gt; dtVuelos = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L105" title="All 2 branches covered.">            for (Vuelo v : vuelos) {</span>
+<span class="fc" id="L106">                dtVuelos.add(new DtDatosVueloR(</span>
+<span class="fc" id="L107">                        v.getNombre(),</span>
+<span class="fc" id="L108">                        v.getFecha(),</span>
+<span class="fc" id="L109">                        v.getDuracion(),</span>
+<span class="fc" id="L110">                        v.getAsientosTurista(),</span>
+<span class="fc" id="L111">                        v.getAsientosEjecutivo(),</span>
+<span class="fc" id="L112">                        v.getFechaAlta(),</span>
+<span class="fc" id="L113">                        v.getRuta().getOrigen().getNombre(),</span>
+<span class="fc" id="L114">                        v.getRuta().getDestino().getNombre(),</span>
+<span class="fc" id="L115">                        v.getRuta().getCostoBaseEjecutivo(),</span>
+<span class="fc" id="L116">                        v.getRuta().getCostoBaseTurista(),</span>
+<span class="fc" id="L117">                        v.getRuta().getCostoEquipajeExtra()</span>
+                ));
+<span class="fc" id="L119">            }</span>
+<span class="fc" id="L120">            return dtVuelos;</span>
+        } finally {
+<span class="fc" id="L122">            entityManager.close();</span>
+        }
+    }
+    public DtVuelo obtenerDtVueloPorNombre(String nombreVuelo) {
+<span class="fc" id="L126">        EntityManager entityManager = emf.createEntityManager();</span>
+        try {
+<span class="fc" id="L128">            TypedQuery&lt;Vuelo&gt; query = entityManager.createQuery(</span>
+                    &quot;SELECT v FROM Vuelo v WHERE v.nombre = :nombreVuelo&quot;, Vuelo.class);
+<span class="fc" id="L130">            query.setParameter(&quot;nombreVuelo&quot;, nombreVuelo);</span>
+<span class="fc" id="L131">            List&lt;Vuelo&gt; resultados = query.getResultList();</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">            if (resultados.isEmpty()) return null;</span>
+
+<span class="fc" id="L134">            Vuelo vuelo = resultados.get(0);</span>
+
+<span class="fc" id="L136">            DtVuelo dtVuelo = new DtVuelo(</span>
+<span class="fc" id="L137">                    vuelo.getNombre(),</span>
+<span class="fc" id="L138">                    vuelo.getFecha(),</span>
+<span class="fc" id="L139">                    vuelo.getDuracion(),</span>
+<span class="fc" id="L140">                    vuelo.getAsientosTurista(),</span>
+<span class="fc" id="L141">                    vuelo.getAsientosEjecutivo(),</span>
+<span class="fc" id="L142">                    vuelo.getFechaAlta(),</span>
+                    null,
+<span class="fc" id="L144">                    vuelo.getUrlImagen()</span>
+            );
+
+<span class="fc" id="L147">            return dtVuelo;</span>
+        } finally {
+<span class="fc" id="L149">            entityManager.close();</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
