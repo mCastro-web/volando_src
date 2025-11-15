@@ -67,6 +67,7 @@ public class AceptarRV extends JInternalFrame {
             }
         });
     }
+
     private void confirmarRV(){
         String nombreRuta = (String) comboRutas.getSelectedItem();
         if (nombreRuta != null) {
@@ -81,6 +82,8 @@ public class AceptarRV extends JInternalFrame {
             JOptionPane.showMessageDialog(this, "Ruta rechazada correctamente.");
         }
     }
+
+
     private void limpiarFormulario() {
         comboAerolinea.setSelectedIndex(-1);
         comboRutas.setSelectedIndex(-1);

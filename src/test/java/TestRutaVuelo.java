@@ -47,6 +47,7 @@ public class TestRutaVuelo {
                 aerolinea,
                 categoria,
                 "https://img.com/ruta.jpg",
+                "https://img.com/ruta.mp4",
                 "Vuelo rápido"
         );
 
@@ -109,6 +110,7 @@ public class TestRutaVuelo {
                 aerolinea,
                 categoria,
                 "imagen.png",
+                "video.mp4",
                 "desc corta"
         );
 
@@ -145,6 +147,7 @@ public class TestRutaVuelo {
                 10.0f,
                 20.0f,
                 5.0f,
+                null,
                 null,
                 null,
                 null,

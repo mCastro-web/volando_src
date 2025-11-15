@@ -30,6 +30,7 @@ public class TestDtRutaVuelo {
                 "Regional",
                 vuelos,
                 "https://img.com/ruta.jpg",
+                "https://video.com/ruta.mp4",
                 "Ruta corta",
                 EstadoRuta.INGRESADA
         );

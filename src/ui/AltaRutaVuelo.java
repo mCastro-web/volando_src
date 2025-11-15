@@ -105,11 +105,12 @@ public class AltaRutaVuelo extends JInternalFrame {
             int dia = (int) comboBoxDia.getSelectedItem();
             LocalDate fechaAlta = LocalDate.of(anio, mes, dia);
             String Url ="imagen123";
+            String urlVideo = "video123";
             String desCorta = "muy linda";
 
 
             sistema.altaRutaVuelo(nombre, descripcion, fechaAlta, costoT, costoE, costoU,
-                    aerolineaNick, origenNombre, destinoNombre, categoriaNombre, Url, desCorta);
+                    aerolineaNick, origenNombre, destinoNombre, categoriaNombre, Url, urlVideo, desCorta);
 
 
             JOptionPane.showMessageDialog(this, "Ruta de vuelo registrada correctamente.");

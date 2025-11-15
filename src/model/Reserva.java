@@ -65,13 +65,15 @@ public class Reserva {
     @JoinColumn(name = "paquete_id")
     private PaqueteVuelo paquete;
 
-
     // ---- Relación con Pasaje ----
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pasaje> pasajes = new ArrayList<>();
 
     @Column(name = "vencimiento")
     private LocalDate vencimiento;
+
+    @Column(name = "checkin_realizado", nullable = false)
+    private Boolean checkinRealizado;
 
 
     /** Constructor vacío requerido por JPA */
@@ -163,4 +165,11 @@ public class Reserva {
         pasaje.setReserva(this);
     }
 
+    public boolean getCheckin() {
+        return checkinRealizado;
+    }
+
+    public void setCheckinRealizado(Boolean checkinRealizado) {
+        this.checkinRealizado = checkinRealizado;
+    }
 }

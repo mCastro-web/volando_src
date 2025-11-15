@@ -87,6 +87,7 @@ public class TestReservaDAO {
                 aerolinea,
                 categoria,
                 "https://img.com/ruta.jpg",
+                "https://video.com/ruta.mp4",
                 "Corta"
         );
         entityManager.persist(ruta);

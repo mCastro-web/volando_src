@@ -513,6 +513,7 @@ public class TestSistema {
                 "Buenos Aires",
                 "Internacional",
                 "https://img.com/ruta.jpg",
+                "video.com/ruta.mp4",
                 "Ruta corta"
         );
 
@@ -538,6 +539,7 @@ public class TestSistema {
                     "Buenos Aires",
                     "Internacional",
                     "https://img.com/ruta.jpg",
+                    "video.com/ruta.mp4",
                     "Ruta inválida"
             );
         });
@@ -560,6 +562,7 @@ public class TestSistema {
                     "Montevideo",
                     "Internacional",
                     "https://img.com/ruta.jpg",
+                    "video.com/ruta.mp4",
                     "Ruta inválida"
             );
         });
@@ -602,6 +605,7 @@ public class TestSistema {
                 "Santiago",
                 "Internacional",
                 "https://img.com/vuelo.jpg",
+                "video.com/ruta.mp4",
                 "Ruta aérea"
         );
 
@@ -655,6 +659,7 @@ public class TestSistema {
                 "Lima",
                 "Internacional",
                 "https://img.com/ruta.jpg",
+                "video.com/ruta.mp4",
                 "Ruta test"
         );
 
@@ -689,6 +694,7 @@ public class TestSistema {
                 "Asunción",
                 "Internacional",
                 "https://img.com/ruta.jpg",
+                "video.com/ruta.mp4",
                 "Ruta test"
         );
 
@@ -723,6 +729,7 @@ public class TestSistema {
                 "Madrid",
                 "Internacional",
                 "https://img.com/ruta.jpg",
+                "video.com/ruta.mp4",
                 "Ruta estado"
         );
 
@@ -781,6 +788,7 @@ public class TestSistema {
                 "Montevideo",
                 "Buenos Aires",
                 "Internacional",
+                null,
                 null,
                 null
         );
@@ -1128,7 +1136,7 @@ public class TestSistema {
         sistema.altaPaqueteRV("PaqueteSinRuta", "Sin rutas", 5, 50f, hoy);
         sistema.altaPaqueteRV("PaqueteConRuta", "Con rutas", 7, 70f, hoy);
         sistema.altaAerolinea("AerolineaR", "Aerolinea R", "r@aero.com", "123", null, "Desc", null);
-        sistema.altaRutaVuelo("RutaParaPaquete", "Ruta prueba", hoy, 100f, 200f, 50f, "AerolineaR", "Montevideo", "Buenos Aires", "Internacional", null, null);
+        sistema.altaRutaVuelo("RutaParaPaquete", "Ruta prueba", hoy, 100f, 200f, 50f, "AerolineaR", "Montevideo", "Buenos Aires", "Internacional", null, null, null);
         sistema.agregarRutaPaquete("PaqueteConRuta", "AerolineaR", "RutaParaPaquete", 1, TipoAsiento.TURISTA);
 
 
@@ -1161,6 +1169,7 @@ public class TestSistema {
                 "Montevideo",
                 "Buenos Aires",
                 "Internacional",
+                null,
                 null,
                 null
         );
@@ -1237,7 +1246,7 @@ public class TestSistema {
         // Crear aerolinea y ruta
         sistema.altaAerolinea("AerolineaTest20", "Aerolinea Test", "correo20@aero.com", "123", null, "Descripcion", null);
         sistema.altaRutaVuelo("RutaTest20", "Ruta prueba", hoy, 100f, 200f, 50f, "AerolineaTest",
-                "Montevideo", "Buenos Aires", "Internacional", null, null);
+                "Montevideo", "Buenos Aires", "Internacional", null, null,null);
 
 
         // Crear paquete
@@ -1352,8 +1361,7 @@ public class TestSistema {
         DtReserva reserva = sistema.obtenerDtReservaPorClienteVuelo("VueloInexistente", "ClienteInexistente");
         assertTrue(reserva == null || reserva instanceof DtReserva);
     }
-
-
+    
     // ===================== obtenerListaNombresRutasPorPaquete =====================
     @Test
     void testObtenerListaNombresRutasPorPaquete() {
@@ -1361,6 +1369,7 @@ public class TestSistema {
         assertNotNull(rutas);
         assertTrue(rutas.isEmpty() || rutas.get(0) instanceof String);
     }
+
     @Test
     void testSubirImagenConNull() {
         // Pasamos null para cubrir el catch

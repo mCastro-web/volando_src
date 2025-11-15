@@ -2,16 +2,8 @@ package sistema;
 
 
 
+import dao.*;
 import data_types.*;
-import dao.CategoriaDAO;
-import dao.CiudadDAO;
-import dao.RutaVueloDAO;
-import dao.UsuarioDAO;
-import dao.ReservaDAO;
-import dao.VueloDAO;
-import dao.PaqueteVueloDAO;
-import dao.ClienteDAO;
-import dao.AerolineaDAO;
 import model.Aerolinea;
 import model.Categoria;
 import model.Ciudad;
@@ -36,6 +28,8 @@ import java.util.List;
 
 import jakarta.servlet.http.Part;
 
+import javax.swing.*;
+
 public class Sistema implements ISistema {
 
     private static Sistema INSTANCE = null;
@@ -50,6 +44,7 @@ public class Sistema implements ISistema {
     private final ClienteDAO clienteDAO = new ClienteDAO();
     private final AerolineaDAO aerolineaDAO = new AerolineaDAO();
     private final ReservaDAO reservaDAO = new ReservaDAO();
+    private final SocialDAO socialDAO = new SocialDAO();
 
     private Sistema() {
     }
@@ -201,7 +196,7 @@ public class Sistema implements ISistema {
     // ===================== RUTAS Y VUELOS =====================
     public void altaRutaVuelo(String nombre, String descripcion, LocalDate fechaAlta,
                               float costoBaseTurista, float costoBaseEjecutivo, float costoEquipajeExtra,
-                              String nickAerolinea, String origenNombre, String destinoNombre, String nombreCategoria, String urlImagen, String descripcionCorta) {
+                              String nickAerolinea, String origenNombre, String destinoNombre, String nombreCategoria, String urlImagen, String urlVideo, String descripcionCorta) {
 
         Ciudad origen = ciudadDAO.obtenerCiudadPorNombre(origenNombre);
         Ciudad destino = ciudadDAO.obtenerCiudadPorNombre(destinoNombre);
@@ -215,7 +210,7 @@ public class Sistema implements ISistema {
 
         RutaVuelo ruta = new RutaVuelo(nombre, descripcion, fechaAlta,
                 costoBaseTurista, costoBaseEjecutivo, costoEquipajeExtra,
-                origen, destino, aerolinea, categoria, urlImagen, descripcionCorta);
+                origen, destino, aerolinea, categoria, urlImagen, urlVideo, descripcionCorta);
 
         rutaDAO.guardarRutaVuelo(ruta);
     }
@@ -625,6 +620,19 @@ public class Sistema implements ISistema {
     public List<DtReserva> listarPaquetesCompradosPorCliente(String nickCliente) {
         return reservaDAO.listarCompraPaqueteCliente(nickCliente);
     }
+
+    public void finalizarRutaDeVuelo(String nombreRuta) {
+        rutaDAO.finalizarRuta(nombreRuta);
+    }
+
+    public void guardarSocial(String idSeguidor, String idSeguido) {
+        socialDAO.seguirUsuario(idSeguidor, idSeguido);
+    }
+
+    public void eliminarSocial(String idSeguidor, String idSeguido) {
+        socialDAO.dejarSeguirUsuario(idSeguidor, idSeguido);
+    }
+
 }
 
 

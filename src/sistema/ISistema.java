@@ -34,18 +34,22 @@ public interface ISistema {
     void modificarAerolinea(String nickname, String nombre, String email, String contrasenia, String urlImagen,
                             String descripcion, String sitioWeb, String nick);
     // === USUARIO ===
+    void eliminarSocial(String idSeguidor, String idSeguido);
+    void guardarSocial(String idSeguidor, String idSeguido);
     DtUsuario consultaUsuario(String nickname);
     DtUsuario dataUsuarioPorNick(String nickname);
     List<String> listarRutasConfirmadasAerolinea(String nombre);
+
     // === CATEGORÍA ===
     void altaCategoria(String nombreCategoria) throws Exception;
-
     void actualizarEstadoRuta(String nombreRuta, EstadoRuta nuevoEstado);
+
     // === RUTA DE VUELO ===
     void altaRutaVuelo(String nombre, String descripcion, LocalDate fechaAlta,
                        float costoBaseTurista, float costoBaseEjecutivo, float costoEquipajeExtra,
-                       String nickAerolinea, String origenNombre, String destinoNombre, String nombreCategoria, String urlImagen, String descripcionCorta);
+                       String nickAerolinea, String origenNombre, String destinoNombre, String nombreCategoria, String urlImagen, String urlVideo, String descripcionCorta);
 
+    void finalizarRutaDeVuelo(String nombreRuta);
     List<String> listarNombresCategorias();
     List<String> listarNombresCiudades();
     List<String> listarNicknamesAerolineas();

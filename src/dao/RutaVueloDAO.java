@@ -42,7 +42,6 @@ public class RutaVueloDAO {
         }
     }
 
-
     public List<String> listarRutasPorAerolinea(String nickAerolinea) {
         EntityManager entityManager = emf.createEntityManager();
         try {
@@ -97,6 +96,54 @@ public class RutaVueloDAO {
         }
     }
 
+    public void finalizarRuta(String nombreRuta) {
+
+        EntityManager em = emf.createEntityManager();
+
+        if (obtenerRutaPorNombre(nombreRuta) == null) {
+            throw new PersistenceException("La ruta con nombre " + nombreRuta + " no existe.");
+        }
+
+        try {
+            em.getTransaction().begin();
+            Long vuelosPendientes = em.createQuery(
+                            "SELECT COUNT(v) FROM Vuelo v " +
+                                    "WHERE v.rutaNombre = :nombreRuta AND v.fecha < :fechaActual", Long.class)
+                    .setParameter("nombreRuta", nombreRuta)
+                    .setParameter("fechaActual", java.time.LocalDate.now())
+                    .getSingleResult();
+
+            if (vuelosPendientes > 0) {
+                throw new PersistenceException("La ruta tiene vuelos pendientes y no puede finalizarse.");
+            }
+
+            Long enPaquetes = em.createQuery(
+                            "SELECT COUNT(i) FROM ItemPaquete i " +
+                                    "WHERE i.rutaNombre = :nombreRuta", Long.class)
+                    .setParameter("nombreRuta", nombreRuta)
+                    .getSingleResult();
+
+            if (enPaquetes > 0) {
+                throw new PersistenceException("La ruta está incluida en un paquete y no puede finalizarse.");
+            }
+
+            em.createQuery(
+                            "UPDATE RutaVuelo r SET r.estado = :nuevoEstado " +
+                                    "WHERE r.nombre = :nombreRuta")
+                    .setParameter("nuevoEstado", EstadoRuta.FINALIZADA)
+                    .setParameter("nombreRuta", nombreRuta)
+                    .executeUpdate();
+
+            em.getTransaction().commit();
+
+        } catch (PersistenceException e) {
+            em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
     public DtRutaVuelo obtenerDtRutaPorNombre(String nombre) {
         EntityManager entityManager = emf.createEntityManager();
         try {
@@ -125,6 +172,7 @@ public class RutaVueloDAO {
                     ruta.getCategoria().getNombre(),
                     nombresVuelos,
                     ruta.getUrlImagen(),
+                    ruta.getUrlVideo(),
                     ruta.getDescripcionCorta(),
                     ruta.getEstado()
             );

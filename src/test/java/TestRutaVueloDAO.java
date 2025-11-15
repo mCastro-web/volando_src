@@ -53,6 +53,7 @@ public class TestRutaVueloDAO {
             Aerolinea aerolinea = new Aerolinea("AeroRuta12", "AeroRuta S.A.1", "contacto@aeroruta.com12", "12345", "1234", "Compañía de prueba", "https://aeroruta.com");
             Categoria categoria = new Categoria("Regional");
 
+
             // --- Guardar dependencias ---
             entityManager.getTransaction().begin();
             entityManager.persist(aeropuerto1);
@@ -76,6 +77,7 @@ public class TestRutaVueloDAO {
                     aerolinea,
                     categoria,
                     "https://img.com/ruta.jpg",
+                    "https://video.com/ruta.mp4",
                     "Ruta corta"
             );
 
@@ -113,7 +115,7 @@ public class TestRutaVueloDAO {
             // --- Probar catch de persistencia ---
             RutaVuelo rutaDuplicada = new RutaVuelo(
                     "RutaTest001", "Duplicada", LocalDate.now(), 50f, 100f, 10f,
-                    origen, destino, aerolinea, categoria, null, null
+                    origen, destino, aerolinea, categoria, null, null, null
             );
             PersistenceException persistEx = assertThrows(PersistenceException.class, () -> {
                 rutaVueloDAO.guardarRutaVuelo(rutaDuplicada); // debería fallar por PK duplicada
@@ -159,6 +161,7 @@ public class TestRutaVueloDAO {
                 aerolinea,
                 categoria,
                 "url",
+                "url video",
                 "desc corta"
         );
 

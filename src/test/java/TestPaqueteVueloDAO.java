@@ -192,6 +192,7 @@ public class TestPaqueteVueloDAO {
                 aerolinea,        // objeto Aerolinea
                 categoria,        // objeto Categoria
                 "urlImagen.jpg",  // urlImagen
+                "urlVideo.mp4",   // urlVideo
                 "Vuelo directo"   // descripcionCorta
         );
 

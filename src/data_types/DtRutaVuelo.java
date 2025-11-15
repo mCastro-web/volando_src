@@ -16,6 +16,7 @@ public class DtRutaVuelo {
     private final String categoria;
     private final List<String> vuelos; // <-- ahora incluimos los vuelos
     private final String urlImagen;
+    private final String urlVideo;
     private final String descripcionCorta;
     private final EstadoRuta estado;
 
@@ -32,6 +33,7 @@ public class DtRutaVuelo {
             String categoria,
             List<String> vuelos,
             String urlImagen,
+            String urlVideo,
             String descripcionCorta,
             EstadoRuta estado
     ) {
@@ -47,8 +49,13 @@ public class DtRutaVuelo {
         this.categoria = categoria;
         this.vuelos = vuelos;
         this.urlImagen = urlImagen;
+        this.urlVideo = urlVideo;
         this.descripcionCorta = descripcionCorta;
         this.estado = estado;
+    }
+
+    public String getUrlVideo() {
+        return urlVideo;
     }
 
     public String getNombre() {

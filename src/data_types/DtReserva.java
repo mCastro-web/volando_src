@@ -17,6 +17,7 @@ public class DtReserva {
     private final DtPaqueteVuelo paquete;      // puede ser null
     private final List<DtPasaje> pasajes;      // lista de pasajes
     private final LocalDate validez;
+    private final Boolean checkin;
 
     // Constructor
     public DtReserva(
@@ -28,7 +29,8 @@ public class DtReserva {
             DtVuelo vuelo,
             DtPaqueteVuelo paquete,
             List<DtPasaje> pasajes,
-            LocalDate validez) {
+            LocalDate validez,
+            Boolean checkin) {
 
         this.fecha = fecha;
         this.tipoAsiento = tipoAsiento;
@@ -39,6 +41,7 @@ public class DtReserva {
         this.paquete = paquete;
         this.pasajes = (pasajes != null) ? pasajes : new ArrayList<>();
         this.validez = validez;
+        this.checkin = checkin;
     }
 
     // Getters
@@ -51,5 +54,5 @@ public class DtReserva {
     public DtPaqueteVuelo getPaquete() { return paquete; }
     public List<DtPasaje> getPasajes() { return pasajes; }
     public LocalDate getValidez() { return validez; }
-
+    public Boolean getCheckin() { return checkin; }
 }

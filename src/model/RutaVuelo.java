@@ -82,6 +82,9 @@ public class RutaVuelo {
     @Column(name = "imagen")
     private String urlImagen;
 
+    @Column(name = "video")
+    private String urlVideo;
+
     @Column(name = "descripcion_corta", length = 500)
     private String descripcionCorta;
 
@@ -108,6 +111,7 @@ public class RutaVuelo {
                      Aerolinea aerolinea,
                      Categoria categoria,
                      String urlImagen,
+                     String urlVideo,
                      String descripcionCorta) {
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -121,8 +125,16 @@ public class RutaVuelo {
         this.categoria = categoria;
         this.urlImagen = urlImagen;
         this.descripcionCorta = descripcionCorta;
+        this.urlVideo = urlVideo;
     }
 
+    public String getUrlVideo() {
+        return urlVideo;
+    }
+
+    public void setUrlVideo(String urlVideo) {
+        this.urlVideo = urlVideo;
+    }
 
     // --- Getters / Setters de atributos simples ---
     public String getNombre() {
@@ -246,6 +258,7 @@ public class RutaVuelo {
                 this.categoria != null ? this.categoria.getNombre() : null,
                 nombresVuelos,
                 this.urlImagen,
+                this.urlVideo,
                 this.descripcionCorta,
                 this.estado
 

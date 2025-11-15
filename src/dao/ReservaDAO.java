@@ -145,7 +145,7 @@ public class ReservaDAO {
                 )).toList();
 
                 return new DtReserva(reserva.getFecha(), reserva.getTipoAsiento(), reserva.getEquipajeExtra(), reserva.getCosto(), dtCliente,
-                        dtVuelo, null, dtPasajeList, reserva.getVencimiento());
+                        dtVuelo, null, dtPasajeList, reserva.getVencimiento(), reserva.getCheckin());
             }).toList();
         } finally {
             em.close();
@@ -192,7 +192,7 @@ public class ReservaDAO {
                 )).toList();
 
                 return new DtReserva(reserva.getFecha(), reserva.getTipoAsiento(), reserva.getEquipajeExtra(), reserva.getCosto(), dtCliente,
-                        dtVuelo, null, dtPasajeList, reserva.getVencimiento());
+                        dtVuelo, null, dtPasajeList, reserva.getVencimiento(), reserva.getCheckin());
             }).toList();
         } finally {
             em.close();
@@ -297,8 +297,10 @@ public class ReservaDAO {
                     dtVuelo,
                     dtPaquete,
                     dtPasajeList,
-                    reserva.getVencimiento()
+                    reserva.getVencimiento(),
+                    reserva.getCheckin()
             );
+
             return dtReserva;
 
         } catch (NoResultException e) {
