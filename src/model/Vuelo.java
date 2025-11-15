@@ -50,6 +50,12 @@ public class Vuelo {
     @Column(name = "imagen")
     private String urlImagen;
 
+    @Column(name = "contadorEjecutivo", nullable = false)
+    private Integer contadorEjecutivo;
+
+    @Column(name = "contadorTurista", nullable = false)
+    private Integer contadorTurista;
+
     /** Constructor vacío requerido por JPA */
     public Vuelo() { }
 
@@ -69,7 +75,8 @@ public class Vuelo {
         this.fechaAlta = fechaAlta;
         this.ruta = ruta;
         this.urlImagen = urlImagen;
-
+        this.contadorEjecutivo = 0;
+        this.contadorTurista = 0;
     }
 
     // --- Getters ---
@@ -93,6 +100,22 @@ public class Vuelo {
     public void setRuta(RutaVuelo ruta) { this.ruta = ruta; }
     public void setReservaVuelo(List<Reserva> reservaVuelo) { this.reservaVuelo = reservaVuelo; }
     public void setUrlImagen(String urlImagen) {this.urlImagen = urlImagen; }
+
+    public Integer getContadorTurista() {
+        return contadorTurista;
+    }
+
+    public void setContadorTurista(Integer contadorTurista) {
+        this.contadorTurista = contadorTurista;
+    }
+
+    public Integer getContadorEjecutivo() {
+        return contadorEjecutivo;
+    }
+
+    public void setContadorEjecutivo(Integer contadorEjecutivo) {
+        this.contadorEjecutivo = contadorEjecutivo;
+    }
 }
 
 

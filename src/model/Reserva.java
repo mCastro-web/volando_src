@@ -75,7 +75,6 @@ public class Reserva {
     @Column(name = "checkin_realizado", nullable = false)
     private Boolean checkinRealizado;
 
-
     /** Constructor vacío requerido por JPA */
     public Reserva() { }
 
