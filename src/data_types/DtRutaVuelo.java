@@ -19,6 +19,7 @@ public class DtRutaVuelo {
     private final String urlVideo;
     private final String descripcionCorta;
     private final EstadoRuta estado;
+    private final int cantVisitas;
 
     public DtRutaVuelo(
             String nombre,
@@ -35,7 +36,8 @@ public class DtRutaVuelo {
             String urlImagen,
             String urlVideo,
             String descripcionCorta,
-            EstadoRuta estado
+            EstadoRuta estado,
+            int cantVisitas
     ) {
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -52,6 +54,7 @@ public class DtRutaVuelo {
         this.urlVideo = urlVideo;
         this.descripcionCorta = descripcionCorta;
         this.estado = estado;
+        this.cantVisitas = cantVisitas;
     }
 
     public String getUrlVideo() {
@@ -107,4 +110,8 @@ public class DtRutaVuelo {
     public String getDescripcionCorta() {return descripcionCorta; }
 
     public EstadoRuta getEstado() {return estado; }
+
+    public int getCantVisitas() {
+        return cantVisitas;
+    }
 }

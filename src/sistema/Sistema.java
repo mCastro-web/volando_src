@@ -633,6 +633,16 @@ public class Sistema implements ISistema {
         socialDAO.dejarSeguirUsuario(idSeguidor, idSeguido);
     }
 
+    @Override
+    public void incrementarVisitaRuta(String nombreRuta) {
+        rutaDAO.incrementarVisitaRuta(nombreRuta);
+    }
+
+    @Override
+    public List<DtRutaVuelo> listarRutasMasVisitadas() {
+        return rutaDAO.listarRutasMasVisitadas();
+    }
+
 }
 
 

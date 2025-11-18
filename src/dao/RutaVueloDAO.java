@@ -174,7 +174,8 @@ public class RutaVueloDAO {
                     ruta.getUrlImagen(),
                     ruta.getUrlVideo(),
                     ruta.getDescripcionCorta(),
-                    ruta.getEstado()
+                    ruta.getEstado(),
+                    ruta.getCantVisitas()
             );
 
         } catch (PersistenceException e) {
@@ -184,4 +185,40 @@ public class RutaVueloDAO {
             entityManager.close();
         }
     }
+
+    public List<DtRutaVuelo> listarRutasMasVisitadas() {
+        EntityManager entityManager = emf.createEntityManager();
+
+        List<RutaVuelo> rutas = entityManager.createQuery(
+                        "SELECT r FROM RutaVuelo r\n" +
+                                "LEFT JOIN FETCH r.vuelos\n" +
+                                "LEFT JOIN FETCH r.origen\n" +
+                                "LEFT JOIN FETCH r.destino\n" +
+                                "LEFT JOIN FETCH r.aerolinea a " +
+                                "LEFT JOIN FETCH r.categoria c " +
+                                "ORDER BY r.cantVisitas DESC\n", RutaVuelo.class)
+                .setMaxResults(5)
+                .getResultList();
+
+        entityManager.close();
+
+        return rutas.stream()
+                .map(RutaVuelo::toDto)
+                .toList();
+    }
+
+    public void incrementarVisitaRuta(String nombreRuta) {
+        EntityManager entityManager = emf.createEntityManager();
+        entityManager.getTransaction().begin();
+
+        entityManager.createQuery(
+                        "UPDATE RutaVuelo r SET r.cantVisitas = r.cantVisitas + 1 WHERE r.nombre = :nombre"
+                )
+                .setParameter("nombre", nombreRuta)
+                .executeUpdate();
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+    }
+
 }

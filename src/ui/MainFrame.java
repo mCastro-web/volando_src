@@ -51,6 +51,7 @@ MainFrame extends JFrame {
         menuVuelos.add(crearMenuItem("Alta de Ruta de Vuelo", e -> abrirAltaRuta()));
         menuVuelos.add(crearMenuItem("Consulta de Ruta de Vuelo", e -> abrirConsultaRuta()));
         menuVuelos.add(crearMenuItem("Aceptar/Rechazar Ruta de Vuelo", e -> abrirAceptarRV()));
+        menuVuelos.add(crearMenuItem("Rutas de Vuelo más visitadas", e -> abrirRutasMasVisitadas()));
         menuVuelos.add(crearMenuItem("Alta de Vuelo", e -> abrirAltaVuelo()));
         menuVuelos.add(crearMenuItem("Consulta de Vuelo", e -> abrirConsultaVuelo()));
         menuVuelos.add(crearMenuItem("Reserva de Vuelo", e -> abrirReservaVuelo()));
@@ -133,6 +134,10 @@ MainFrame extends JFrame {
     }
     public void abrirAceptarRV() {
         AceptarRV form = new AceptarRV();
+        abrirFormulario(form);
+    }
+    public void abrirRutasMasVisitadas() {
+        RutasMasVisitadas form = new RutasMasVisitadas();
         abrirFormulario(form);
     }
     private void abrirAltaVuelo() {

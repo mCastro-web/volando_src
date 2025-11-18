@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
 
+import static java.sql.Types.NULL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,7 +33,8 @@ public class TestDtRutaVuelo {
                 "https://img.com/ruta.jpg",
                 "https://video.com/ruta.mp4",
                 "Ruta corta",
-                EstadoRuta.INGRESADA
+                EstadoRuta.INGRESADA,
+                NULL
         );
 
         assertEquals("RutaTest", ruta.getNombre());

@@ -50,10 +50,10 @@ public class Vuelo {
     @Column(name = "imagen")
     private String urlImagen;
 
-    @Column(name = "contadorEjecutivo", nullable = false)
+    @Column(name = "contadorEjecutivo")
     private Integer contadorEjecutivo;
 
-    @Column(name = "contadorTurista", nullable = false)
+    @Column(name = "contadorTurista")
     private Integer contadorTurista;
 
     /** Constructor vacío requerido por JPA */

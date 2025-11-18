@@ -91,6 +91,9 @@ public class RutaVuelo {
     @Enumerated(EnumType.STRING)
     private EstadoRuta estado= INGRESADA;
 
+    @Column(name = "cant_visitas", length = 500)
+    private Integer cantVisitas;
+
     // --- Constructores ---
 
     /**
@@ -238,8 +241,11 @@ public class RutaVuelo {
 
     public EstadoRuta getEstado() {return estado; }
 
+    public void setCantVisitas(int cantVisitas) { this.cantVisitas = cantVisitas; }
+
  //   public void setEstado(EstadoRuta estado) {this.estado = estado; }
 
+    public int getCantVisitas() {return cantVisitas; }
     public DtRutaVuelo toDto() {
         // Obtenemos solo los nombres de los vuelos
         List<String> nombresVuelos = this.vuelos.keySet().stream()
@@ -260,7 +266,8 @@ public class RutaVuelo {
                 this.urlImagen,
                 this.urlVideo,
                 this.descripcionCorta,
-                this.estado
+                this.estado,
+                this.cantVisitas != null ? this.cantVisitas : 0
 
         );
     }

@@ -56,6 +56,8 @@ public interface ISistema {
     DtRutaVuelo obtenerDtRutaPorNombre(String nombre);
     /*List<String> listarRutasIngresadasPorAerolinea(String nombre);
     void actualizarEstadoRuta(String nombreRuta, String nuevoEstadoStr);*/
+    void incrementarVisitaRuta(String nombreRuta);
+    List<DtRutaVuelo> listarRutasMasVisitadas();
     // === VUELO ===
     void altaVuelo(String nombre, LocalDate fecha, LocalTime duracion,
                    int asientosTurista, int asientosEjecutivo, LocalDate fechaAlta, String nombreRuta, String urlImagen);

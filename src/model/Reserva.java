@@ -72,7 +72,7 @@ public class Reserva {
     @Column(name = "vencimiento")
     private LocalDate vencimiento;
 
-    @Column(name = "checkin_realizado", nullable = false)
+    @Column(name = "checkin_realizado")
     private Boolean checkinRealizado;
 
     /** Constructor vacío requerido por JPA */
