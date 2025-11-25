@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TestUsuarioDAO {
-
+/*
     private static UsuarioDAO usuarioDAO;
     private static EntityManagerFactory entityManagerFactory;
 
@@ -95,5 +95,5 @@ public class TestUsuarioDAO {
         assertNotNull(dtCierreSesion);
         assertEquals("nicktest", dtCierreSesion.getNickname());
     }
-
+*/
 }

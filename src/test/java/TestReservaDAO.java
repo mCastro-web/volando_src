@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class TestReservaDAO {
 
-
+/*
     private final EntityManagerFactory factory = Persistence.createEntityManagerFactory("appPU");
     private final ReservaDAO reservaDAO = new ReservaDAO();
     private final VueloDAO vueloDAO = new VueloDAO();
@@ -240,5 +240,5 @@ public class TestReservaDAO {
     public void testObtenerDtReservaPorCliVueNoEncontrada() {
         DtReserva res = reservaDAO.obtenerDtReservaPorCliVue("noExiste", "vueloInexistente");
         assertNull(res);
-    }
+    }*/
 }

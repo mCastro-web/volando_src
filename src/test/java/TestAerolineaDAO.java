@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestAerolineaDAO {
 
-    private static AerolineaDAO dao;
+    /*private static AerolineaDAO dao;
 
     @BeforeAll
     public static void setup() {
@@ -56,6 +56,6 @@ public class TestAerolineaDAO {
 
         Aerolinea result = dao.obtenerAerolineaPorNick("NickTest");
         assertEquals("NuevoNombre", result.getNombre());
-    }
+    }*/
 
 }

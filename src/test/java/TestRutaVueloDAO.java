@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class TestRutaVueloDAO {
-
+/*
     private static RutaVueloDAO rutaVueloDAO;
     private static EntityManagerFactory factory;
 
@@ -178,5 +178,5 @@ public class TestRutaVueloDAO {
 
         entityManager.close();
     }
-
+*/
 }

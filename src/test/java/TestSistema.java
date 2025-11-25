@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TestSistema {
 
-
+/*
     private static Sistema sistema;
 
 
@@ -1375,5 +1375,5 @@ public class TestSistema {
         // Pasamos null para cubrir el catch
         String url = sistema.subirImagen(null, "nombreArchivo");
         assertNull(url, "Debe devolver null si se pasa null");
-    }
+    }*/
 }

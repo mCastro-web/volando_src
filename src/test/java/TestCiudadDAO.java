@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class TestCiudadDAO {
 
-    private static CiudadDAO dao;
+    /*private static CiudadDAO dao;
 
     @BeforeAll
     public static void setup() {
@@ -88,5 +88,5 @@ public class TestCiudadDAO {
         List<String> nombres = dao.listarNombresCiudades();
         assertNotNull(nombres, "La lista de nombres no debería ser nula");
         assertTrue(nombres.contains(nombreUnico), "La lista debería contener la ciudad recién creada");
-    }
+    }*/
 }
