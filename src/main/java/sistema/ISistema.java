@@ -166,4 +166,9 @@ public interface ISistema {
     List<DtRutaVuelo> buscarRutas(String query);
 
     List<DtPaqueteVuelo> buscarPaquetes(String query);
+    List<Long> listarReservasPendientesCheckin(String nick);
+    void realizarCheckin(Long idReserva);
+    List<Long> listarReservasConCheckin(String nick);
+    DtReserva obtenerReservaCheckin(Long idReserva);
+    DtCheckin obtenerCheckinPorReserva(Long idReserva);
 }

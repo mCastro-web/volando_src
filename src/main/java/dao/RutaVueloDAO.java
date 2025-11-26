@@ -110,9 +110,8 @@ public class RutaVueloDAO {
         try {
             em.getTransaction().begin();
             Long vuelosPendientes = em.createQuery(
-                    "SELECT COUNT(v) FROM Vuelo v " +
-                            "WHERE v.rutaNombre = :nombreRuta AND v.fecha < :fechaActual",
-                    Long.class)
+                            "SELECT COUNT(v) FROM Vuelo v " +
+                                    "WHERE v.ruta.nombre = :nombreRuta AND v.fecha > :fechaActual", Long.class)
                     .setParameter("nombreRuta", nombreRuta)
                     .setParameter("fechaActual", java.time.LocalDate.now())
                     .getSingleResult();
@@ -122,9 +121,8 @@ public class RutaVueloDAO {
             }
 
             Long enPaquetes = em.createQuery(
-                    "SELECT COUNT(i) FROM ItemPaquete i " +
-                            "WHERE i.rutaNombre = :nombreRuta",
-                    Long.class)
+                            "SELECT COUNT(i) FROM ItemPaquete i " +
+                                    "WHERE i.rutaVuelo.nombre = :nombreRuta", Long.class)
                     .setParameter("nombreRuta", nombreRuta)
                     .getSingleResult();
 
@@ -133,8 +131,8 @@ public class RutaVueloDAO {
             }
 
             em.createQuery(
-                    "UPDATE RutaVuelo r SET r.estado = :nuevoEstado " +
-                            "WHERE r.nombre = :nombreRuta")
+                            "UPDATE RutaVuelo r SET r.estado = :nuevoEstado " +
+                                    "WHERE r.nombre = :nombreRuta")
                     .setParameter("nuevoEstado", EstadoRuta.FINALIZADA)
                     .setParameter("nombreRuta", nombreRuta)
                     .executeUpdate();

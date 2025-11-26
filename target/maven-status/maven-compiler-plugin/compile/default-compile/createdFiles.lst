@@ -34,6 +34,7 @@ ui\ModificarUsuario$3.class
 data_types\DtRutaVuelo.class
 model\Pasaje.class
 ui\MainFrame.class
+data_types\DtCheckin.class
 ui\AceptarRV$1.class
 ui\pruebaAltaUsuario$3.class
 data_types\DtVuelo.class
@@ -47,6 +48,7 @@ ui\ModificarUsuario$5.class
 model\Usuario.class
 ui\AgregarRDVaPaquete.class
 ui\ModificarUsuario$2.class
+data_types\DtCheckin$DtPasajeCheckin.class
 ui\ReservaVuelo.class
 model\Reserva.class
 sistema\ISistema.class

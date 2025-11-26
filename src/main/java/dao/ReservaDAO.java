@@ -1,5 +1,6 @@
 package dao;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import data_types.*;
@@ -307,6 +308,160 @@ public class ReservaDAO {
             return null;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    public List<Long> listarReservasPendientesCheckin(String nicknameCliente) {
+        System.out.println(">>> ENTRO A listarReservasSinCheckin");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Long> query = em.createQuery(
+                    "SELECT r.identificador FROM Reserva r " +
+                            "WHERE r.cliente.nickname = :nick AND (r.checkinRealizado IS NULL OR r.checkinRealizado = FALSE)",
+                    Long.class
+            );
+            query.setParameter("nick", nicknameCliente);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public void realizarCheckin(Long idReserva) {
+        EntityManager entityManager = emf.createEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            int updated = entityManager.createQuery(
+                            "UPDATE Reserva r SET r.checkinRealizado = TRUE, r.horaInicioEmbarque = :ahora " +
+                                    "WHERE r.identificador = :id"
+                    )
+                    .setParameter("ahora", LocalDateTime.now())
+                    .setParameter("id", idReserva)
+                    .executeUpdate();
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    public List<Long> listarReservasConCheckin(String nicknameCliente) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Long> query = em.createQuery(
+                    "SELECT r.identificador FROM Reserva r " +
+                            "WHERE r.cliente.nickname = :nick AND r.checkinRealizado = TRUE",
+                    Long.class
+            );
+            query.setParameter("nick", nicknameCliente);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    public DtReserva obtenerReservaCheckin(Long idReserva) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Reserva> query = em.createQuery(
+                    "SELECT r FROM Reserva r " +
+                            "JOIN FETCH r.cliente c " +
+                            "JOIN FETCH r.vuelo v " +
+                            "LEFT JOIN FETCH r.pasajes p " +
+                            "WHERE r.identificador = :id AND r.checkinRealizado = TRUE",
+                    Reserva.class
+            );
+            query.setParameter("id", idReserva);
+
+            Reserva r = query.getSingleResult();
+
+            DtCliente dtCliente = new DtCliente(
+                    r.getCliente().getNickname(),
+                    r.getCliente().getNombre(),
+                    null, null, // email, urlImagen no hace falta
+                    r.getCliente().getApellido(),
+                    null, null, null, null
+            );
+
+            DtVuelo dtVuelo = new DtVuelo(
+                    r.getVuelo().getNombre(),
+                    r.getVuelo().getFecha(),
+                    r.getVuelo().getDuracion(),
+                    r.getVuelo().getAsientosTurista(),
+                    r.getVuelo().getAsientosEjecutivo(),
+                    r.getVuelo().getFechaAlta(),
+                    r.getVuelo().getRuta().getNombre(),
+                    r.getVuelo().getUrlImagen()
+            );
+
+            List<DtPasaje> dtPasajes = r.getPasajes().stream().map(p -> new DtPasaje(
+                    p.getIdentificador(),
+                    p.getNombre(),
+                    p.getNombre()
+            )).toList();
+
+            return new DtReserva(
+                    r.getFecha(),
+                    r.getTipoAsiento(),
+                    r.getEquipajeExtra(),
+                    r.getCosto(),
+                    dtCliente,
+                    dtVuelo,
+                    null,          // Paquete, si no interesa lo dejamos null
+                    dtPasajes,
+                    r.getVencimiento(),
+                    r.getCheckin() // true
+            );
+
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public DtCheckin obtenerCheckinPorReserva(Long idReserva) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Reserva> query = em.createQuery(
+                    "SELECT r FROM Reserva r " +
+                            "JOIN FETCH r.cliente c " +
+                            "JOIN FETCH r.vuelo v " +
+                            "JOIN FETCH v.ruta rt " +
+                            "LEFT JOIN FETCH r.pasajes p " +
+                            "WHERE r.identificador = :id",
+                    Reserva.class
+            );
+            query.setParameter("id", idReserva);
+            Reserva reserva = query.getSingleResult();
+
+            List<DtCheckin.DtPasajeCheckin> dtPasajeros = reserva.getPasajes().stream()
+                    .map(p -> new DtCheckin.DtPasajeCheckin(
+                            p.getNombre(),
+                            p.getApellido(),
+                            reserva.getTipoAsiento().toString()
+                    ))
+                    .toList();
+
+            return new DtCheckin(
+                    reserva.getCliente().getNombre(),
+                    reserva.getCliente().getApellido(),
+                    reserva.getVuelo().getNombre(),
+                    reserva.getVuelo().getRuta().getNombre(),
+                    reserva.getVuelo().getRuta().getOrigen().getNombre(),
+                    reserva.getVuelo().getRuta().getDestino().getNombre(),
+                    reserva.getVuelo().getFecha(),
+                    dtPasajeros,
+                    reserva.getHoraInicioEmbarque() != null
+                            ? reserva.getHoraInicioEmbarque().toLocalTime()
+                            : null
+            );
+        } catch (NoResultException e) {
             return null;
         } finally {
             em.close();

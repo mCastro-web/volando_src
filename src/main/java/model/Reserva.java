@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import data_types.TipoAsiento;
@@ -21,7 +22,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.FetchType;
 
 @Entity
-@Table(name = "Reservas")
+@Table(name = "reservas")
 @Access(AccessType.FIELD)
 public class Reserva {
 
@@ -74,6 +75,10 @@ public class Reserva {
 
     @Column(name = "checkin_realizado")
     private Boolean checkinRealizado;
+
+    @Column(name = "hora_inicio_embarque")
+    private LocalDateTime horaInicioEmbarque;
+
 
     /** Constructor vacío requerido por JPA */
     public Reserva() { }
@@ -171,4 +176,13 @@ public class Reserva {
     public void setCheckinRealizado(Boolean checkinRealizado) {
         this.checkinRealizado = checkinRealizado;
     }
+
+    public LocalDateTime getHoraInicioEmbarque() {
+        return horaInicioEmbarque;
+    }
+
+    public void setHoraInicioEmbarque(LocalDateTime horaInicioEmbarque) {
+        this.horaInicioEmbarque = horaInicioEmbarque;
+    }
+
 }

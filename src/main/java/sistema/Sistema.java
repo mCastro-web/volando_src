@@ -758,4 +758,29 @@ public class Sistema implements ISistema {
     public List<DtPaqueteVuelo> buscarPaquetes(String query) {
         return paqueteDAO.buscarPaquetes(query);
     }
+
+    
+    @Override
+    public List<Long> listarReservasPendientesCheckin(String nicknameCliente) {
+        return reservaDAO.listarReservasPendientesCheckin(nicknameCliente);
+    }
+
+    @Override
+    public void realizarCheckin(Long idReserva) {
+        reservaDAO.realizarCheckin(idReserva);
+    }
+
+    @Override
+    public List<Long> listarReservasConCheckin(String nicknameCliente) {
+        return reservaDAO.listarReservasConCheckin(nicknameCliente);
+    }
+    @Override
+    public DtReserva obtenerReservaCheckin(Long idReserva) {
+        return reservaDAO.obtenerReservaCheckin(idReserva);
+    }
+
+    @Override
+    public DtCheckin obtenerCheckinPorReserva(Long idReserva) {
+        return reservaDAO.obtenerCheckinPorReserva(idReserva);
+    }
 }
