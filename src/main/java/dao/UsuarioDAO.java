@@ -1,10 +1,7 @@
 package dao;
 
 
-import data_types.DtAerolinea;
-import data_types.DtCliente;
-import data_types.DtUsuario;
-import data_types.EstadoUsuario;
+import data_types.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -14,6 +11,8 @@ import jakarta.persistence.TypedQuery;
 import model.Aerolinea;
 import model.Cliente;
 import model.Usuario;
+import data_types.DtUsuarioExtendido;
+import data_types.DtAerolineaExtendido;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
@@ -42,7 +41,6 @@ public class UsuarioDAO {
             entityManager.close();
         }
     }
-
 
     public DtUsuario dataUsuarioPorNick(String nickname) {
         if (nickname == null || nickname.isBlank()) {
@@ -87,6 +85,145 @@ public class UsuarioDAO {
             entityManager.close();
         }
     }
+
+    public DtUsuarioExtendido dataUsuarioPorNickExtendido(String nicknameConsultado, String nicknameLogueado) {
+
+        if (nicknameConsultado == null || nicknameConsultado.isBlank()) {
+            throw new IllegalArgumentException("El nickname es obligatorio.");
+        }
+
+        EntityManager em = emf.createEntityManager();
+        try {
+            Usuario usuario = em.find(Usuario.class, nicknameConsultado);
+
+            if (usuario == null) {
+                throw new IllegalArgumentException("No existe el usuario " + nicknameConsultado);
+            }
+
+            boolean esPropioPerfil = nicknameConsultado.equalsIgnoreCase(nicknameLogueado);
+
+            // ===============================
+            //        SEGUIDORES / SEGUIDOS
+            // ===============================
+            List<String> seguidores = em.createQuery(
+                    "SELECT s.idSeguidor FROM Social s WHERE s.idSeguido = :nick",
+                            String.class)
+                    .setParameter("nick", nicknameConsultado)
+                    .getResultList();
+
+            List<String> siguiendo = em.createQuery(
+                            "SELECT s.idSeguido FROM Social s WHERE s.idSeguidor = :nick\n",
+                            String.class)
+                    .setParameter("nick", nicknameConsultado)
+                    .getResultList();
+
+            // ======================================================================
+            //                            CASO AEROLÍNEA
+            // ======================================================================
+            if (usuario instanceof Aerolinea aerolinea) {
+
+                RutaVueloDAO rutaDao = new RutaVueloDAO();
+
+                List<String> rutasConfirmadas =
+                        rutaDao.listarRutasConfirmadasPorAerolinea(nicknameConsultado);
+
+                List<String> rutasIngresadas = List.of();
+                List<String> rutasRechazadas = List.of();
+                List<String> rutasFinalizadas = List.of();
+
+                if (esPropioPerfil) {
+                    rutasIngresadas = rutaDao.listarRutasIngresadasPorAerolinea(nicknameConsultado);
+
+                    rutasRechazadas = em.createQuery(
+                                    "SELECT r.nombre FROM RutaVuelo r " +
+                                            "WHERE r.aerolinea.nickname = :nick AND r.estado = 'RECHAZADA'",
+                                    String.class)
+                            .setParameter("nick", nicknameConsultado)
+                            .getResultList();
+
+                    rutasFinalizadas = em.createQuery(
+                                    "SELECT r.nombre FROM RutaVuelo r " +
+                                            "WHERE r.aerolinea.nickname = :nick AND r.estado = 'FINALIZADA'",
+                                    String.class)
+                            .setParameter("nick", nicknameConsultado)
+                            .getResultList();
+                }
+
+                return new DtAerolineaExtendido(
+                        aerolinea.getNickname(),
+                        aerolinea.getNombre(),
+                        aerolinea.getEmail(),
+                        aerolinea.getUrlImagen(),
+                        aerolinea.getDescripcion(),
+                        aerolinea.getSitioWeb(),
+                        seguidores,
+                        siguiendo,
+                        rutasConfirmadas,
+                        rutasIngresadas,
+                        rutasRechazadas,
+                        rutasFinalizadas
+                );
+            }
+
+            // ======================================================================
+            //                            CASO CLIENTE
+            // ======================================================================
+
+            if (usuario instanceof Cliente cliente) {
+
+                List<DtReserva> reservas = List.of();
+                List<String> paquetes = List.of();
+
+                if (esPropioPerfil) {
+                    reservas = em.createQuery(
+                                    "SELECT r FROM Reserva r WHERE r.cliente.nickname = :nick AND r.cantPasajes > 0",
+                                    DtReserva.class)
+                            .setParameter("nick", nicknameConsultado)
+                            .getResultList();
+
+                    paquetes = em.createQuery(
+                            "SELECT p.nombre " +
+                                    "FROM Reserva r JOIN PaqueteVuelo p ON p.id = r.paquete.id " +
+                                    "WHERE r.cliente.nickname = :nick",
+                            String.class
+                            ).setParameter("nick", nicknameConsultado)
+                            .getResultList();
+                }
+
+                return new DtClienteExtendido(
+                        cliente.getNickname(),
+                        cliente.getNombre(),
+                        cliente.getEmail(),
+                        cliente.getUrlImagen(),
+                        cliente.getApellido(),
+                        cliente.getFechaNac(),
+                        cliente.getNacionalidad(),
+                        cliente.getTipoDocumento(),
+                        cliente.getNumDocumento(),
+                        seguidores,
+                        siguiendo,
+                        reservas,
+                        paquetes
+                );
+            }
+
+            // Caso usuario genérico
+            return new DtUsuarioExtendido(
+                    usuario.getNickname(),
+                    usuario.getNombre(),
+                    usuario.getEmail(),
+                    usuario.getUrlImagen(),
+                    null,
+                    seguidores,
+                    siguiendo
+            );
+
+        } finally {
+            em.close();
+        }
+    }
+
+
 
 
 

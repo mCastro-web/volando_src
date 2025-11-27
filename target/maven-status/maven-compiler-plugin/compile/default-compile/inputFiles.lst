@@ -10,10 +10,12 @@ C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\dao\SocialD
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\dao\UsuarioDAO.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\dao\VueloDAO.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtAerolinea.java
+C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtAerolineaExtendido.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtAeropuerto.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtCategoria.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtCheckin.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtCliente.java
+C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtClienteExtendido.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtDatosVueloR.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtItemPaquete.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtPaqueteVuelo.java
@@ -21,6 +23,7 @@ C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtReserva.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtRutaVuelo.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtUsuario.java
+C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtUsuarioExtendido.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\DtVuelo.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\EstadoRuta.java
 C:\Users\Usuario\Documents\UTEC\volando_uy\volando_src\src\main\java\data_types\EstadoUsuario.java

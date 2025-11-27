@@ -14,9 +14,8 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DtReserva {
 
-    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private Long id;
     private LocalDate fecha;
-
     private TipoAsiento tipoAsiento;
     private int equipajeExtra;
     private float costo;
@@ -37,6 +36,7 @@ public class DtReserva {
 
     // Constructor completo
     public DtReserva(
+            Long id,
             LocalDate fecha,
             TipoAsiento tipoAsiento,
             int equipajeExtra,
@@ -48,6 +48,7 @@ public class DtReserva {
             LocalDate validez,
             Boolean checkin) {
 
+        this.id = id;
         this.fecha = fecha;
         this.tipoAsiento = tipoAsiento;
         this.equipajeExtra = equipajeExtra;
@@ -61,6 +62,7 @@ public class DtReserva {
     }
 
     // Getters
+    public Long getId() { return id; }
     public LocalDate getFecha() {
         return fecha;
     }
@@ -102,6 +104,8 @@ public class DtReserva {
     }
 
     // Setters
+    public void setId(Long id) {this.id = id; }
+
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }

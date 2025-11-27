@@ -145,7 +145,7 @@ public class ReservaDAO {
                         p.getNombre()
                 )).toList();
 
-                return new DtReserva(reserva.getFecha(), reserva.getTipoAsiento(), reserva.getEquipajeExtra(), reserva.getCosto(), dtCliente,
+                return new DtReserva(reserva.getIdentificador(), reserva.getFecha(), reserva.getTipoAsiento(), reserva.getEquipajeExtra(), reserva.getCosto(), dtCliente,
                         dtVuelo, null, dtPasajeList, reserva.getVencimiento(), reserva.getCheckin());
             }).toList();
         } finally {
@@ -192,7 +192,7 @@ public class ReservaDAO {
                         p.getNombre()
                 )).toList();
 
-                return new DtReserva(reserva.getFecha(), reserva.getTipoAsiento(), reserva.getEquipajeExtra(), reserva.getCosto(), dtCliente,
+                return new DtReserva(reserva.getIdentificador(), reserva.getFecha(), reserva.getTipoAsiento(), reserva.getEquipajeExtra(), reserva.getCosto(), dtCliente,
                         dtVuelo, null, dtPasajeList, reserva.getVencimiento(), reserva.getCheckin());
             }).toList();
         } finally {
@@ -274,6 +274,7 @@ public class ReservaDAO {
                         p.getDescripcion(),
                         p.getDiasValidez(),
                         p.getDescuento(),
+                        p.getCosto(),
                         p.getAltaFecha()
                 );
             }
@@ -290,6 +291,7 @@ public class ReservaDAO {
             }
 
             DtReserva dtReserva = new DtReserva(
+                    reserva.getIdentificador(),
                     reserva.getFecha(),
                     reserva.getTipoAsiento(),
                     reserva.getEquipajeExtra(),
@@ -319,7 +321,7 @@ public class ReservaDAO {
         try {
             TypedQuery<Long> query = em.createQuery(
                     "SELECT r.identificador FROM Reserva r " +
-                            "WHERE r.cliente.nickname = :nick AND (r.checkinRealizado IS NULL OR r.checkinRealizado = FALSE)",
+                            "WHERE r.cliente.nickname = :nick AND (r.checkinRealizado IS NULL OR r.checkinRealizado = FALSE) AND r.cantPasajes > 0",
                     Long.class
             );
             query.setParameter("nick", nicknameCliente);
@@ -406,6 +408,7 @@ public class ReservaDAO {
             )).toList();
 
             return new DtReserva(
+                    r.getIdentificador(),
                     r.getFecha(),
                     r.getTipoAsiento(),
                     r.getEquipajeExtra(),

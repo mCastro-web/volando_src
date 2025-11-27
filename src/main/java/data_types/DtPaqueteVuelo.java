@@ -39,12 +39,12 @@ public class DtPaqueteVuelo {
     }
 
     // Constructor con 5 parámetros
-    public DtPaqueteVuelo(String nombre, String descripcion, int diasValidez, float descuento, LocalDate altaFecha) {
+    public DtPaqueteVuelo(String nombre, String descripcion, int diasValidez, float descuento, float costo, LocalDate altaFecha) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.diasValidez = diasValidez;
         this.descuento = descuento;
-        this.costo = 0f;
+        this.costo = costo;
         this.altaFecha = altaFecha;
         this.items = new ArrayList<>();
         this.reservas = new ArrayList<>();

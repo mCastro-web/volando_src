@@ -9,12 +9,7 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
-import model.ItemPaquete;
-import model.Reserva;
-import model.RutaVuelo;
-import model.Cliente;
-import model.Aerolinea;
-import model.PaqueteVuelo;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -202,6 +197,25 @@ public class PaqueteVueloDAO {
         try {
             entityManager.getTransaction().begin();
             entityManager.persist(reserva);
+
+            // Crear los items si hay paquete
+            if (reserva.getPaquete() != null) {
+                PaqueteVuelo paquete = reserva.getPaquete();
+                Cliente cliente = reserva.getCliente();
+
+                for (ItemPaquete item : paquete.getItems()) {
+                    PaqueteClienteItem pci = new PaqueteClienteItem(
+                            cliente,
+                            item.getCant(),          // cantidad inicial
+                            item.getTipoAsiento(),
+                            item.getRutaVuelo(),
+                            reserva                   // referencia a la reserva
+                    );
+
+                    entityManager.persist(pci); // persistimos con el mismo EM
+                }
+            }
+
             entityManager.getTransaction().commit();
         } catch (PersistenceException ex) {
             if (entityManager.getTransaction().isActive())
@@ -216,7 +230,7 @@ public class PaqueteVueloDAO {
         EntityManager entityManager = emf.createEntityManager();
         try {
             return entityManager.createQuery(
-                    "SELECT p FROM PaqueteVuelo p WHERE p.nombre = :nombre", PaqueteVuelo.class)
+                            "SELECT p FROM PaqueteVuelo p LEFT JOIN FETCH p.items WHERE p.nombre = :nombre", PaqueteVuelo.class)
                     .setParameter("nombre", nombre)
                     .getSingleResult();
         } catch (NoResultException e) {
@@ -225,7 +239,6 @@ public class PaqueteVueloDAO {
             entityManager.close();
         }
     }
-
     public boolean clienteYaComproPaquete(Cliente cliente, PaqueteVuelo paquete) {
         if (paquete == null || paquete.getIdentificador() == null) {
             throw new IllegalArgumentException("El paquete no es válido");
@@ -252,6 +265,7 @@ public class PaqueteVueloDAO {
                     paquete.getDescripcion(),
                     paquete.getDiasValidez(),
                     paquete.getDescuento(),
+                    paquete.getCosto(),
                     paquete.getAltaFecha());
 
         } catch (PersistenceException e) {
@@ -312,6 +326,7 @@ public class PaqueteVueloDAO {
                     p.getDescripcion(),
                     p.getDiasValidez(),
                     p.getDescuento(),
+                    p.getCosto(),
                     p.getAltaFecha())).toList();
         } finally {
             em.close();

@@ -783,4 +783,22 @@ public class Sistema implements ISistema {
     public DtCheckin obtenerCheckinPorReserva(Long idReserva) {
         return reservaDAO.obtenerCheckinPorReserva(idReserva);
     }
+
+    @Override
+    public DtUsuarioExtendido dataUsuarioPorNickExtendido(String nicknameConsultado,  String nicknameLogueado) {
+        return usuarioDAO.dataUsuarioPorNickExtendido(nicknameConsultado, nicknameLogueado);
+    }
+
+        public DtUsuarioExtendido consultaUsuarioExtendido(String nicknameConsultado, String nicknameLogueado) {
+
+        if (nicknameConsultado == null || nicknameConsultado.isBlank())
+            throw new IllegalArgumentException("El nickname es obligatorio");
+
+        DtUsuarioExtendido usuarioDto = usuarioDAO.dataUsuarioPorNickExtendido(nicknameConsultado, nicknameLogueado);
+
+        if (usuarioDto == null)
+            throw new IllegalArgumentException("No existe un usuario con nickname: " + nicknameConsultado);
+
+        return usuarioDto;
+    }
 }

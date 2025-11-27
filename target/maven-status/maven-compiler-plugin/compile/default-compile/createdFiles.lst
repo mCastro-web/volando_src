@@ -24,6 +24,7 @@ ui\CompraPaquete.class
 dao\PaqueteVueloDAO.class
 ui\ReservaVuelo$2.class
 dao\SocialDAO.class
+data_types\DtUsuarioExtendido.class
 ui\AceptarRV.class
 ui\AltaRutaVuelo$2.class
 dao\PaqueteClienteItemDAO.class
@@ -45,6 +46,7 @@ model\Vuelo.class
 dao\RutaVueloDAO.class
 ui\AltaRutaVuelo$1.class
 ui\ModificarUsuario$5.class
+data_types\DtAerolineaExtendido.class
 model\Usuario.class
 ui\AgregarRDVaPaquete.class
 ui\ModificarUsuario$2.class
@@ -57,6 +59,7 @@ data_types\DtAeropuerto.class
 model\Categoria.class
 data_types\EstadoUsuario.class
 ui\pruebaAltaUsuario$2.class
+data_types\DtClienteExtendido.class
 ui\ConsultaRDV.class
 model\ItemPaquete.class
 dao\UsuarioDAO.class
