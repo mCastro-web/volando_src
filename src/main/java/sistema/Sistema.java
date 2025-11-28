@@ -759,7 +759,6 @@ public class Sistema implements ISistema {
         return paqueteDAO.buscarPaquetes(query);
     }
 
-    
     @Override
     public List<Long> listarReservasPendientesCheckin(String nicknameCliente) {
         return reservaDAO.listarReservasPendientesCheckin(nicknameCliente);
@@ -774,6 +773,7 @@ public class Sistema implements ISistema {
     public List<Long> listarReservasConCheckin(String nicknameCliente) {
         return reservaDAO.listarReservasConCheckin(nicknameCliente);
     }
+
     @Override
     public DtReserva obtenerReservaCheckin(Long idReserva) {
         return reservaDAO.obtenerReservaCheckin(idReserva);
@@ -785,11 +785,11 @@ public class Sistema implements ISistema {
     }
 
     @Override
-    public DtUsuarioExtendido dataUsuarioPorNickExtendido(String nicknameConsultado,  String nicknameLogueado) {
+    public DtUsuarioExtendido dataUsuarioPorNickExtendido(String nicknameConsultado, String nicknameLogueado) {
         return usuarioDAO.dataUsuarioPorNickExtendido(nicknameConsultado, nicknameLogueado);
     }
 
-        public DtUsuarioExtendido consultaUsuarioExtendido(String nicknameConsultado, String nicknameLogueado) {
+    public DtUsuarioExtendido consultaUsuarioExtendido(String nicknameConsultado, String nicknameLogueado) {
 
         if (nicknameConsultado == null || nicknameConsultado.isBlank())
             throw new IllegalArgumentException("El nickname es obligatorio");
@@ -802,11 +802,11 @@ public class Sistema implements ISistema {
         return usuarioDto;
     }
 
-    public List<String> listarSeguidores(String idUsuario){
+    public List<String> listarSeguidores(String idUsuario) {
         return socialDAO.listarSeguidores(idUsuario);
     }
-    
-    public List<String> listarSeguidos(String idUsuario){
+
+    public List<String> listarSeguidos(String idUsuario) {
         return socialDAO.listarSeguidos(idUsuario);
     }
 }
