@@ -50,6 +50,7 @@ public class AceptarRV extends JInternalFrame {
             }
         });
     }
+
     private void cargarDatos() {
         List<String> aerolineas = sistema.listarNicknamesAerolineas();
         comboAerolinea.removeAllItems();
@@ -68,13 +69,14 @@ public class AceptarRV extends JInternalFrame {
         });
     }
 
-    private void confirmarRV(){
+    private void confirmarRV() {
         String nombreRuta = (String) comboRutas.getSelectedItem();
         if (nombreRuta != null) {
             sistema.actualizarEstadoRuta(nombreRuta, EstadoRuta.CONFIRMADA);
             JOptionPane.showMessageDialog(this, "Ruta confirmada correctamente.");
         }
     }
+
     private void rechazarRV() {
         String nombreRuta = (String) comboRutas.getSelectedItem();
         if (nombreRuta != null) {
@@ -82,7 +84,6 @@ public class AceptarRV extends JInternalFrame {
             JOptionPane.showMessageDialog(this, "Ruta rechazada correctamente.");
         }
     }
-
 
     private void limpiarFormulario() {
         comboAerolinea.setSelectedIndex(-1);

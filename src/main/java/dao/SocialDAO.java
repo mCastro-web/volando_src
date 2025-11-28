@@ -3,6 +3,7 @@ package dao;
 import jakarta.persistence.*;
 import model.Usuario;
 import model.Social;
+import java.util.List;
 
 public class SocialDAO {
 
@@ -129,4 +130,28 @@ public class SocialDAO {
         }
     }
 
+        public List<String> listarSeguidores(String idUsuario) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery(
+                            "SELECT s.idSeguidor FROM Social s WHERE s.idSeguido = :usuario", String.class)
+                    .setParameter("usuario", idUsuario)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    // Listar usuarios que sigue un usuario
+    public List<String> listarSeguidos(String idUsuario) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery(
+                            "SELECT s.idSeguido FROM Social s WHERE s.idSeguidor = :usuario", String.class)
+                    .setParameter("usuario", idUsuario)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }

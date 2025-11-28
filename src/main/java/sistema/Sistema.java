@@ -801,4 +801,12 @@ public class Sistema implements ISistema {
 
         return usuarioDto;
     }
+
+    public List<String> listarSeguidores(String idUsuario){
+        return socialDAO.listarSeguidores(idUsuario);
+    }
+    
+    public List<String> listarSeguidos(String idUsuario){
+        return socialDAO.listarSeguidos(idUsuario);
+    }
 }

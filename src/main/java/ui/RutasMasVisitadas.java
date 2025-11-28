@@ -31,6 +31,7 @@ public class RutasMasVisitadas extends JInternalFrame {
         setSize(400, 300);
         cargarDatos();
     }
+
     private void cargarDatos() {
         // Llamada al sistema para traer los DTOs (top 5)
         List<DtRutaVuelo> rutas = sistema.listarRutasMasVisitadas();
@@ -62,7 +63,8 @@ public class RutasMasVisitadas extends JInternalFrame {
                 modeloCiuD.addElement(r.getDestino() != null ? r.getDestino() : "-");
                 modeloCantV.addElement(String.valueOf(r.getCantVisitas()));
             }
-            // Si hay menos de 5 resultados, completar las filas restantes para mantener la tabla
+            // Si hay menos de 5 resultados, completar las filas restantes para mantener la
+            // tabla
             for (int i = rutas.size() + 1; i <= 5; i++) {
                 modeloN.addElement(String.valueOf(i));
                 modeloRutas.addElement("-");

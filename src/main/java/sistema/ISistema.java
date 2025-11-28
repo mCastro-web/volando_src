@@ -173,5 +173,7 @@ public interface ISistema {
     DtCheckin obtenerCheckinPorReserva(Long idReserva);
     DtUsuarioExtendido consultaUsuarioExtendido(String nicknameConsultado, String nicknameLogueado);
     DtUsuarioExtendido dataUsuarioPorNickExtendido(String nicknameConsultado,  String nicknameLogueado);
+    List<String> listarSeguidores(String idUsuario);
+    List<String> listarSeguidos(String idUsuario);
 
 }
